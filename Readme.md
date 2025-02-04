@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
-* Студент: [Виктор Волошенко](https://up.htmlacademy.ru/ecmascript-individual/2/user/2401969).
-* Наставник: `Неизвестно`.
+- Студент: [Виктор Волошенко](https://up.htmlacademy.ru/ecmascript-individual/2/user/2401969).
+- Наставник: [Александр Сударев](https://htmlacademy.ru/profile/id1152185).
 
 ---
 
