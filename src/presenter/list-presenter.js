@@ -10,9 +10,11 @@ export default class ListPresenter {
   sortComponent = new SortView();
   listComponent = new ListView();
 
-  constructor({ listContainer, pointsModel }) {
+  constructor({ listContainer, pointsModel, destinationsModel, offersModel }) {
     this.listContainer = listContainer;
     this.pointsModel = pointsModel;
+    this.destinationsModel = destinationsModel;
+    this.offersModel = offersModel;
   }
 
   init() {
@@ -29,7 +31,16 @@ export default class ListPresenter {
 
     for (let i = 0; i < this.pointsList.length; i++) {
       render(
-        new PointView({ point: this.pointsList[i] }),
+        new PointView({
+          point: this.pointsList[i],
+          destination: this.destinationsModel.getDestinationById(
+            this.pointsList[i].destination
+          ),
+          offers: this.offersModel.getOffersById(
+            this.pointsList[i].type,
+            this.pointsList[i].offers
+          ),
+        }),
         this.listComponent.getElement()
       );
     }

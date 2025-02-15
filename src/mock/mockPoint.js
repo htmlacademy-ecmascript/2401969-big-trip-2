@@ -19,8 +19,8 @@ const createPoint = () => {
   return {
     id: getRandomInteger(1, 100),
     basePrice: getRandomInteger(100, 1000),
-    dateFrom: '2024-02-02T21:42:04.116Z',
-    dateTo: '2024-03-02T21:42:04.116Z',
+    dateFrom: '2024-02-15T20:41:04.116Z',
+    dateTo: '2024-02-17T21:42:04.116Z',
     favorite: getRandomBoolean(),
     destination: destinationElement.id,
     type: offersElement.type,

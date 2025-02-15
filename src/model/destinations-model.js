@@ -1,13 +1,13 @@
 import { mockDestinations } from '../mock/mockDestinations';
 
-export default class DestinationModel {
+export default class DestinationsModel {
   destinations = mockDestinations;
 
-  getDestination() {
+  getDestinations() {
     return this.destinations;
   }
 
-  getDestinationsById(id) {
+  getDestinationById(id) {
     return this.getDestinations().find((item) => item.id === id);
   }
 }

@@ -11,9 +11,8 @@ export default class OffersModel {
     return this.getOffers().find((offer) => offer.type === type);
   }
 
-  getOffersById(itemsId) {
-    return this.getOffersOfType.offers.filter((item) =>
-      itemsId.includes(item.id)
-    );
+  getOffersById(type, itemsId) {
+    const offersOfType = this.getOffersOfType(type);
+    return offersOfType.offers.filter((item) => itemsId.includes(item.id));
   }
 }
