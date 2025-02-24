@@ -19,6 +19,8 @@ export default class ListPresenter {
 
   init() {
     this.pointsList = [...this.pointsModel.getPoints()];
+    this.offers = [...this.offersModel.getOffers()];
+    this.destinations = [...this.destinationsModel.getDestinations()];
 
     render(this.sortComponent, this.listContainer);
     render(this.listComponent, this.listContainer);
@@ -27,19 +29,21 @@ export default class ListPresenter {
       this.listComponent.getElement(),
       RenderPosition.AFTERBEGIN
     );
-    render(new EditPointView(), this.listComponent.getElement());
 
     for (let i = 0; i < this.pointsList.length; i++) {
       render(
+        new EditPointView({
+          point: this.pointsList[i],
+          destinations: this.destinations,
+          offers: this.offers,
+        }),
+        this.listComponent.getElement()
+      );
+      render(
         new PointView({
           point: this.pointsList[i],
-          destination: this.destinationsModel.getDestinationById(
-            this.pointsList[i].destination
-          ),
-          offers: this.offersModel.getOffersById(
-            this.pointsList[i].type,
-            this.pointsList[i].offers
-          ),
+          destinations: this.destinations,
+          offers: this.offers,
         }),
         this.listComponent.getElement()
       );

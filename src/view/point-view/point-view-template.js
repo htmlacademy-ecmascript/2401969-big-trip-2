@@ -1,27 +1,32 @@
 import dayjs from 'dayjs';
-import { humanizeTaskDueDate, getDuration } from '../../utils';
+import { humanizeDate, getDuration } from '../../utils';
 
-function createPointTemplate(point, destination, offers) {
+const createOfferTemplate = ({ title, price }) =>
+  `<li class="event__offer">
+    <span class="event__offer-title">${title}</span>
+    &plus;&euro;&nbsp;
+    <span class="event__offer-price">${price}</span>
+  </li>
+`;
+
+function createPointTemplate(point, destinations, offers) {
   const { basePrice, dateFrom, dateTo, type, favorite } = point;
-  const { name } = destination;
-  const dateStart = humanizeTaskDueDate(dateFrom);
+  const pointDestination = destinations.find(
+    (destination) => destination.id === point.destination
+  );
+  const { name } = pointDestination;
+  const pointOffersByType = offers.find((offer) => offer.type === point.type);
+  const pointOffers = pointOffersByType.offers.filter((item) =>
+    point.offers.includes(item.id)
+  );
+  const pointOffersTemplate = pointOffers
+    .map((offer) => createOfferTemplate(offer))
+    .join('');
+  const dateStart = humanizeDate(dateFrom);
   const timeStart = dayjs(dateFrom).format('HH:mm');
   const timeFinish = dayjs(dateTo).format('HH:mm');
   const duration = getDuration(dateFrom, dateTo);
   const favotiteClassName = favorite ? 'event__favorite-btn--active' : '';
-
-  const createOffersTemplate = (offersArray) =>
-    offersArray
-      .map(
-        (offer) => `
-    <li class="event__offer">
-      <span class="event__offer-title">${offer.title}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${offer.price}</span>
-    </li>
-  `
-      )
-      .join('');
 
   return `<li class="trip-events__item">
               <div class="event">
@@ -43,7 +48,7 @@ function createPointTemplate(point, destination, offers) {
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                  ${createOffersTemplate(offers)}
+                  ${pointOffersTemplate}
                 </ul>
                 <button class="event__favorite-btn ${favotiteClassName}" type="button">
                   <span class="visually-hidden">Add to favorite</span>

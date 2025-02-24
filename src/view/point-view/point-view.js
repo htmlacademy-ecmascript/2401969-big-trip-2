@@ -2,14 +2,14 @@ import { createElement } from '../../render.js';
 import { createPointTemplate } from './point-view-template.js';
 
 export default class PointView {
-  constructor({ point, destination, offers }) {
+  constructor({ point, destinations, offers }) {
     this.point = point;
-    this.destination = destination;
+    this.destinations = destinations;
     this.offers = offers;
   }
 
   getTemplate() {
-    return createPointTemplate(this.point, this.destination, this.offers);
+    return createPointTemplate(this.point, this.destinations, this.offers);
   }
 
   getElement() {

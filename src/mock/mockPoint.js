@@ -9,9 +9,9 @@ import { mockOffersByType } from './mockOffers';
 const createPoint = () => {
   const destinationElement = getRandomArrayElement(mockDestinations);
   const offersElement = getRandomArrayElement(mockOffersByType);
-  const { offers } = offersElement;
+  const { offers, type } = offersElement;
   const aviableOffers = offers.map((item) => item.id);
-  const checkedOffers = aviableOffers.slice(
+  const selectedOffers = aviableOffers.slice(
     0,
     getRandomInteger(1, offers.length)
   );
@@ -23,8 +23,8 @@ const createPoint = () => {
     dateTo: '2024-02-17T21:42:04.116Z',
     favorite: getRandomBoolean(),
     destination: destinationElement.id,
-    type: offersElement.type,
-    offers: checkedOffers,
+    type,
+    offers: selectedOffers,
   };
 };
 

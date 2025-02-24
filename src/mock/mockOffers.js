@@ -5,7 +5,6 @@ const createOffer = () => ({
   id: getRandomInteger(1, 100),
   title: getRandomArrayElement(EVENT_TYPE_OFFERS),
   price: getRandomInteger(10, 100),
-  //isActive: getRandomBoolean,
 });
 
 const createOffers = (array) =>
