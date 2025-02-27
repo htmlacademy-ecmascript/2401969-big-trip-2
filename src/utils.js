@@ -29,7 +29,10 @@ const getRandomArrayElement = (elements) =>
 
 const getRandomBoolean = () => Math.random() < 0.5;
 
+const isEscKey = (evt) => evt.key === 'Escape';
+
 export {
+  isEscKey,
   capitalize,
   getRandomInteger,
   getRandomArrayElement,

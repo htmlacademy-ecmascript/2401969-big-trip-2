@@ -1,5 +1,5 @@
 import FilterView from './view/filter-view/filter-view';
-import { render } from './render';
+import { render } from './framework/render';
 import ListPresenter from './presenter/list-presenter';
 import PointsModel from './model/points-model';
 import DestinationsModel from './model/destinations-model';

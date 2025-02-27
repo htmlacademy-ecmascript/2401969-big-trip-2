@@ -1,25 +1,28 @@
-import { createElement } from '../../render.js';
+import AbstractView from '../../framework/view/abstract-view.js';
 import { createPointTemplate } from './point-view-template.js';
 
-export default class PointView {
-  constructor({ point, destinations, offers }) {
-    this.point = point;
-    this.destinations = destinations;
-    this.offers = offers;
+export default class PointView extends AbstractView {
+  #point = null;
+  #destinations = null;
+  #offers = null;
+  #onClick = null;
+  constructor({ point, destinations, offers, onClick }) {
+    super();
+    this.#point = point;
+    this.#destinations = destinations;
+    this.#offers = offers;
+    this.#onClick = onClick;
+    this.element
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#onOpenEditClick);
   }
 
-  getTemplate() {
-    return createPointTemplate(this.point, this.destinations, this.offers);
-  }
+  #onOpenEditClick = (evt) => {
+    evt.preventDefault();
+    this.#onClick();
+  };
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createPointTemplate(this.#point, this.#destinations, this.#offers);
   }
 }
