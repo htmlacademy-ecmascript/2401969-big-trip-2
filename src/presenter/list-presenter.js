@@ -3,9 +3,11 @@ import EditPointView from '../view/edit-point-view/edit-point-view';
 import ListView from '../view/list-view/list-view';
 import PointView from '../view/point-view/point-view';
 import SortView from '../view/sort-view/sort-view';
+import NoPointView from '../view/no-points-view/no-points-view';
 import { render, replace } from '../framework/render';
 import { RenderPosition } from '../framework/render';
 import { isEscKey } from '../utils';
+import { SortTypes } from '../const';
 
 export default class ListPresenter {
   #listContainer = null;
@@ -17,9 +19,8 @@ export default class ListPresenter {
   #offers = [];
   #destinations = [];
 
-  #sortComponent = new SortView();
   #listComponent = new ListView();
-  #addPointComponent = new AddPointView();
+  #noPointComponent = new NoPointView({ messageType: 'EVERYTHING' });
 
   constructor({ listContainer, pointsModel, destinationsModel, offersModel }) {
     this.#listContainer = listContainer;
@@ -36,20 +37,46 @@ export default class ListPresenter {
   }
 
   #renderPointsList() {
-    render(this.#sortComponent, this.#listContainer);
+    if (this.#pointsList.length === 0) {
+      this.#renderNoPoints();
+      return;
+    }
+
+    this.#renderSortView();
     render(this.#listComponent, this.#listContainer);
-    render(
-      this.#addPointComponent,
-      this.#listComponent.element,
-      RenderPosition.AFTERBEGIN
-    );
+    this.#renderAddPoint(this.#pointsList[0]);
 
     for (let i = 0; i < this.#pointsList.length; i++) {
-      this.renderPoint(this.#pointsList[i]);
+      this.#renderPoint(this.#pointsList[i]);
     }
   }
 
-  renderPoint(point) {
+  #renderNoPoints() {
+    render(this.#noPointComponent, this.#listContainer);
+  }
+
+  #renderSortView() {
+    const types = SortTypes;
+    const SortViewComponent = new SortView({ types });
+
+    render(SortViewComponent, this.#listContainer);
+  }
+
+  #renderAddPoint(point) {
+    const addPointComponent = new AddPointView({
+      point,
+      destinations: this.#destinations,
+      offers: this.#offers,
+    });
+
+    render(
+      addPointComponent,
+      this.#listComponent.element,
+      RenderPosition.AFTERBEGIN
+    );
+  }
+
+  #renderPoint(point) {
     const onDocumentEscKeydown = (evt) => {
       if (isEscKey(evt)) {
         evt.preventDefault();

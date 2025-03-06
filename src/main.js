@@ -1,5 +1,6 @@
-import FilterView from './view/filter-view/filter-view';
-import { render } from './framework/render';
+//import FilterView from './view/filter-view/filter-view';
+//import { render } from './framework/render';
+import HeaderPresenter from './presenter/header-presenter';
 import ListPresenter from './presenter/list-presenter';
 import PointsModel from './model/points-model';
 import DestinationsModel from './model/destinations-model';
@@ -12,6 +13,10 @@ const containerElement = mainElement.querySelector('.trip-events');
 const pointsModel = new PointsModel();
 const destinationsModel = new DestinationsModel();
 const offersModel = new OffersModel();
+const headerPresenter = new HeaderPresenter({
+  filtersContainer: filtersElement,
+  pointsModel,
+});
 const listPresenter = new ListPresenter({
   listContainer: containerElement,
   pointsModel,
@@ -19,5 +24,6 @@ const listPresenter = new ListPresenter({
   offersModel,
 });
 
-render(new FilterView(), filtersElement);
+//render(new FilterView(), filtersElement);
+headerPresenter.init();
 listPresenter.init();
