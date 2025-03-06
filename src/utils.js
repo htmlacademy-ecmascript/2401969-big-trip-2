@@ -1,6 +1,9 @@
 import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration';
 dayjs.extend(durationPlugin);
+import isBetween from 'dayjs/plugin/isBetween';
+dayjs.extend(isBetween);
+import { FilterType } from './const';
 
 const DATE_FORMAT = 'D MMMM';
 
@@ -31,6 +34,31 @@ const getRandomBoolean = () => Math.random() < 0.5;
 
 const isEscKey = (evt) => evt.key === 'Escape';
 
+function isDatesPassed(dueDate) {
+  const now = dayjs();
+  return dayjs(dueDate).isBefore(now, 'day');
+}
+
+function isDatesPlanned(dueDate) {
+  const now = dayjs();
+  return dayjs(dueDate).isAfter(now, 'day');
+}
+
+function isDatesCurrent(startDate, endDate) {
+  const now = dayjs();
+  return now.isBetween(dayjs(startDate), dayjs(endDate), 'day', '[]');
+}
+
+const filters = {
+  [FilterType.EVERYTHING]: (points) => points,
+  [FilterType.FUTURE]: (points) =>
+    points.filter((point) => isDatesPlanned(point.dateTo)),
+  [FilterType.PRESENT]: (points) =>
+    points.filter((point) => isDatesCurrent(point.dateFrom, point.dateTo)),
+  [FilterType.PAST]: (points) =>
+    points.filter((point) => isDatesPassed(point.dateFrom)),
+};
+
 export {
   isEscKey,
   capitalize,
@@ -39,4 +67,5 @@ export {
   getRandomBoolean,
   humanizeDate,
   getDuration,
+  filters,
 };

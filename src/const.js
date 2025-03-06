@@ -67,6 +67,28 @@ const EVENT_TYPE_OFFERS = [
   'Water park',
 ];
 
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
+
+const FilterMessage = {
+  EVERYTHING: 'Click New Event to create your first point',
+  PAST: 'There are no past events now',
+  PRESENT: 'There are no present events now',
+  FUTURE: 'There are no future events now',
+};
+
+const SortTypes = [
+  { name: 'day', isActive: true },
+  { name: 'event', isActive: false },
+  { name: 'time', isActive: true },
+  { name: 'price', isActive: true },
+  { name: 'offers', isActive: false },
+];
+
 export {
   DateRange,
   DESTINATION_VALUES,
@@ -74,4 +96,7 @@ export {
   PHOTO_DESCRIPTIONS,
   EVENT_TYPE_VALUES,
   EVENT_TYPE_OFFERS,
+  FilterType,
+  FilterMessage,
+  SortTypes,
 };

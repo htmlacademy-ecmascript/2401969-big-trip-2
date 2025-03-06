@@ -23,14 +23,14 @@ function createTypeTemplate({ type }, id) {
 function createOffersTemplate(typeOffers, pointOffers) {
   if (typeOffers.length !== 0) {
     return `<section class="event__section  event__section--offers">
-                    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-                    <div class="event__available-offers">
+  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  <div class="event__available-offers">
                     ${typeOffers
-                      .map(({ id, title, price }) => {
-                        const checked = pointOffers.includes(id)
-                          ? 'checked'
-                          : '';
-                        return `<div class="event__offer-selector">
+    .map(({ id, title, price }) => {
+      const checked = pointOffers.includes(id)
+        ? 'checked'
+        : '';
+      return `<div class="event__offer-selector">
                                           <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${id}" ${checked}>
                                           <label class="event__offer-label" for="${id}">
                                             <span class="event__offer-title">${title}</span>
@@ -38,8 +38,8 @@ function createOffersTemplate(typeOffers, pointOffers) {
                                             <span class="event__offer-price">${price}</span>
                                           </label>
                                         </div>`;
-                      })
-                      .join('')}
+    })
+    .join('')}
                     </div>
                   </section>`;
   }
