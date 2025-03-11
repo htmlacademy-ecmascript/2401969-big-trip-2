@@ -1,5 +1,5 @@
 import AbstractView from '../../framework/view/abstract-view.js';
-import { createAddPointTemplate } from './add-point-view-template.js';
+import { createAddPointTemplate } from './111.js';
 
 const BLANK_POINT = {
   basePrice: 0,
@@ -14,7 +14,7 @@ export default class AddPointView extends AbstractView {
   #point = null;
   #destinations = null;
   #offers = null;
-  constructor({ point = BLANK_POINT, destinations, offers }) {
+  constructor({ point = BLANK_POINT,destinations, offers }) {
     super();
     this.#point = point;
     this.#destinations = destinations;

@@ -10,7 +10,7 @@ const createOfferTemplate = ({ title, price }) =>
 `;
 
 function createPointTemplate(point, destinations, offers) {
-  const { basePrice, dateFrom, dateTo, type, favorite } = point;
+  const { basePrice, dateFrom, dateTo, type, isFavorite } = point;
   const pointDestination = destinations.find(
     (destination) => destination.id === point.destination
   );
@@ -26,7 +26,7 @@ function createPointTemplate(point, destinations, offers) {
   const timeStart = dayjs(dateFrom).format('HH:mm');
   const timeFinish = dayjs(dateTo).format('HH:mm');
   const duration = getDuration(dateFrom, dateTo);
-  const favotiteClassName = favorite ? 'event__favorite-btn--active' : '';
+  const favotiteClassName = isFavorite ? 'event__favorite-btn--active' : '';
 
   return `<li class="trip-events__item">
               <div class="event">
