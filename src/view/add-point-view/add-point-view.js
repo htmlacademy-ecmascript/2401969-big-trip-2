@@ -1,5 +1,5 @@
 import AbstractView from '../../framework/view/abstract-view.js';
-import { createAddPointTemplate } from './111.js';
+import { createAddPointTemplate } from './add-point-view-template.js';
 
 const BLANK_POINT = {
   basePrice: 0,
