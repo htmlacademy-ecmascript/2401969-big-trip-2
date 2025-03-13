@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { humanizeDate, getDuration } from '../../utils';
+import { humanizeDate, calculatesTravelTime } from '../../utils';
 
 const createOfferTemplate = ({ title, price }) =>
   `<li class="event__offer">
@@ -25,7 +25,7 @@ function createPointTemplate(point, destinations, offers) {
   const dateStart = humanizeDate(dateFrom);
   const timeStart = dayjs(dateFrom).format('HH:mm');
   const timeFinish = dayjs(dateTo).format('HH:mm');
-  const duration = getDuration(dateFrom, dateTo);
+  const duration = calculatesTravelTime(dateFrom, dateTo);
   const favotiteClassName = isFavorite ? 'event__favorite-btn--active' : '';
 
   return `<li class="trip-events__item">
@@ -41,7 +41,7 @@ function createPointTemplate(point, destinations, offers) {
                     &mdash;
                     <time class="event__end-time" datetime="${dateTo}">${timeFinish}</time>
                   </p>
-                  <p class="event__duration">${duration}</p>
+                  <p class="event__duration">${duration}M</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

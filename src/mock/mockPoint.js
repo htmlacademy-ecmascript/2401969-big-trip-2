@@ -3,6 +3,7 @@ import {
   getRandomArrayElement,
   getRandomBoolean,
 } from '../utils';
+import { DATES_FROM, DATES_TO } from '../const';
 import { mockDestinations } from './mockDestinations';
 import { mockOffersByType } from './mockOffers';
 
@@ -19,8 +20,8 @@ const createPoint = () => {
   return {
     id: getRandomInteger(1, 100),
     basePrice: getRandomInteger(100, 1000),
-    dateFrom: '2025-02-15T20:41:04.116Z',
-    dateTo: '2025-02-17T21:42:04.116Z',
+    dateFrom: getRandomArrayElement(DATES_FROM),
+    dateTo: getRandomArrayElement(DATES_TO),
     isFavorite: getRandomBoolean(),
     destination: destinationElement.id,
     type,

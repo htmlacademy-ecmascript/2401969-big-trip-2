@@ -79,33 +79,33 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.VIEW) {
-      this.#replaceToPoint();
+      this.#replaceToView();
     }
   }
 
   #onDocumentEscKeydown = (evt) => {
     if (isEscKey(evt)) {
       evt.preventDefault();
-      this.#replaceToPoint();
+      this.#replaceToView();
       document.removeEventListener('keydown', this.#onDocumentEscKeydown);
     }
   };
 
-  #replaceToForm() {
+  #replaceToEdit() {
     replace(this.#editPointComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#onDocumentEscKeydown);
     this.#handleModeChange();
     this.#mode = Mode.EDIT;
   }
 
-  #replaceToPoint() {
+  #replaceToView() {
     replace(this.#pointComponent, this.#editPointComponent);
     document.removeEventListener('keydown', this.#onDocumentEscKeydown);
     this.#mode = Mode.VIEW;
   }
 
   #handleEditClick = () => {
-    this.#replaceToForm();
+    this.#replaceToEdit();
   };
 
   #handleFavoriteClick = () => {
@@ -114,6 +114,6 @@ export default class PointPresenter {
 
   #handleFormSubmit = (point) => {
     this.#handleDataChange(point);
-    this.#replaceToPoint();
+    this.#replaceToView();
   };
 }
