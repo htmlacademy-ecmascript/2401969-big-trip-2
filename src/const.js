@@ -67,6 +67,30 @@ const EVENT_TYPE_OFFERS = [
   'Water park',
 ];
 
+const DATES_FROM = [
+  '2025-01-10T20:41:04.116Z',
+  '2025-01-15T20:41:04.116Z',
+  '2025-01-20T20:41:04.116Z',
+  '2025-02-10T20:41:04.116Z',
+  '2025-02-15T20:41:04.116Z',
+  '2025-02-20T20:41:04.116Z',
+  '2025-03-10T20:41:04.116Z',
+  '2025-03-15T20:41:04.116Z',
+  '2025-03-20T20:41:04.116Z',
+];
+
+const DATES_TO = [
+  '2025-03-10T20:41:04.116Z',
+  '2025-03-15T20:41:04.116Z',
+  '2025-03-20T20:41:04.116Z',
+  '2025-04-10T20:41:04.116Z',
+  '2025-04-15T20:41:04.116Z',
+  '2025-04-20T20:41:04.116Z',
+  '2025-05-10T20:41:04.116Z',
+  '2025-05-15T20:41:04.116Z',
+  '2025-05-20T20:41:04.116Z',
+];
+
 const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
@@ -81,13 +105,13 @@ const FilterMessage = {
   FUTURE: 'There are no future events now',
 };
 
-const SortTypes = [
-  { name: 'day', isActive: true },
-  { name: 'event', isActive: false },
-  { name: 'time', isActive: true },
-  { name: 'price', isActive: true },
-  { name: 'offers', isActive: false },
-];
+const SortType = {
+  DAY: { name: 'day', isActive: true, isChecked: true },
+  EVENT: { name: 'event', isActive: false},
+  TIME: { name: 'time', isActive: true },
+  PRICE: { name: 'price', isActive: true },
+  OFFERS: { name: 'offers', isActive: false },
+};
 
 export {
   DateRange,
@@ -96,7 +120,9 @@ export {
   PHOTO_DESCRIPTIONS,
   EVENT_TYPE_VALUES,
   EVENT_TYPE_OFFERS,
+  DATES_FROM,
+  DATES_TO,
   FilterType,
   FilterMessage,
-  SortTypes,
+  SortType,
 };

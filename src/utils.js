@@ -5,7 +5,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 import { FilterType } from './const';
 
-const DATE_FORMAT = 'D MMMM';
+const DATE_FORMAT = 'MMM D';
 
 const humanizeDate = (dueDate) =>
   dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
@@ -63,6 +63,43 @@ const filters = {
     points.filter((point) => isDatesPassed(point.dateFrom)),
 };
 
+function getWeightForNullDate(dateA, dateB) {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+}
+
+function calculatesTravelTime(dateFrom, dateTo) {
+  const date1 = dayjs(dateTo);
+  return date1.diff(dateFrom, 'minute');
+}
+
+function sortPointByDate(pointA, pointB) {
+  const weight = getWeightForNullDate(pointA.dateTo, pointB.dateTo);
+
+  return weight ?? dayjs(pointB.dateTo).diff(dayjs(pointA.dateTo));
+}
+
+function sortPointByPrice(pointA, pointB) {
+  return pointB.basePrice - pointA.basePrice;
+}
+
+function sortPointByTime(pointA, pointB) {
+  const durationA = calculatesTravelTime(pointA.dateFrom, pointA.dateTo);
+  const durationB = calculatesTravelTime(pointB.dateFrom, pointB.dateTo);
+  return durationB - durationA;
+}
+
 export {
   isEscKey,
   capitalize,
@@ -71,6 +108,10 @@ export {
   getRandomBoolean,
   humanizeDate,
   getDuration,
+  calculatesTravelTime,
   filters,
   updateItem,
+  sortPointByDate,
+  sortPointByPrice,
+  sortPointByTime,
 };
