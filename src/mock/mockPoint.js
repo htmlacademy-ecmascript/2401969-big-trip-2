@@ -21,7 +21,7 @@ const createPoint = () => {
     basePrice: getRandomInteger(100, 1000),
     dateFrom: '2025-02-15T20:41:04.116Z',
     dateTo: '2025-02-17T21:42:04.116Z',
-    favorite: getRandomBoolean(),
+    isFavorite: getRandomBoolean(),
     destination: destinationElement.id,
     type,
     offers: selectedOffers,

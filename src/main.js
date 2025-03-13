@@ -1,7 +1,7 @@
 //import FilterView from './view/filter-view/filter-view';
 //import { render } from './framework/render';
 import HeaderPresenter from './presenter/header-presenter';
-import ListPresenter from './presenter/list-presenter';
+import MainPresenter from './presenter/main-presenter';
 import PointsModel from './model/points-model';
 import DestinationsModel from './model/destinations-model';
 import OffersModel from './model/offers-model';
@@ -17,8 +17,8 @@ const headerPresenter = new HeaderPresenter({
   filtersContainer: filtersElement,
   pointsModel,
 });
-const listPresenter = new ListPresenter({
-  listContainer: containerElement,
+const mainPresenter = new MainPresenter({
+  mainContainer: containerElement,
   pointsModel,
   destinationsModel,
   offersModel,
@@ -26,4 +26,4 @@ const listPresenter = new ListPresenter({
 
 //render(new FilterView(), filtersElement);
 headerPresenter.init();
-listPresenter.init();
+mainPresenter.init();

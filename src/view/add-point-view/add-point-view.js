@@ -14,7 +14,7 @@ export default class AddPointView extends AbstractView {
   #point = null;
   #destinations = null;
   #offers = null;
-  constructor({ point = BLANK_POINT, destinations, offers }) {
+  constructor({ point = BLANK_POINT,destinations, offers }) {
     super();
     this.#point = point;
     this.#destinations = destinations;

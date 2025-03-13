@@ -34,6 +34,10 @@ const getRandomBoolean = () => Math.random() < 0.5;
 
 const isEscKey = (evt) => evt.key === 'Escape';
 
+function updateItem(items, update) {
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
 function isDatesPassed(dueDate) {
   const now = dayjs();
   return dayjs(dueDate).isBefore(now, 'day');
@@ -68,4 +72,5 @@ export {
   humanizeDate,
   getDuration,
   filters,
+  updateItem,
 };
