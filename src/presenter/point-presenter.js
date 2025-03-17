@@ -53,6 +53,7 @@ export default class PointPresenter {
       destinations: this.#destinations,
       offers: this.#offers,
       onSubmit: this.#handleFormSubmit,
+      onEditClose: this.#handleEditClose,
     });
 
     if(prevPointComponent === null || prevEditPointComponent === null) {
@@ -79,6 +80,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.VIEW) {
+      this.#editPointComponent.reset(this.#point);
       this.#replaceToView();
     }
   }
@@ -86,6 +88,7 @@ export default class PointPresenter {
   #onDocumentEscKeydown = (evt) => {
     if (isEscKey(evt)) {
       evt.preventDefault();
+      this.#editPointComponent.reset(this.#point);
       this.#replaceToView();
       document.removeEventListener('keydown', this.#onDocumentEscKeydown);
     }
@@ -114,6 +117,11 @@ export default class PointPresenter {
 
   #handleFormSubmit = (point) => {
     this.#handleDataChange(point);
+    this.#replaceToView();
+  };
+
+  #handleEditClose = () => {
+    this.#editPointComponent.reset(this.#point);
     this.#replaceToView();
   };
 }
