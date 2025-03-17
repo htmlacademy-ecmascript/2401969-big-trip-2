@@ -106,7 +106,7 @@ const FilterMessage = {
 };
 
 const SortType = {
-  DAY: { name: 'day', isActive: true, isChecked: true },
+  DAY: { name: 'day', isActive: true,},
   EVENT: { name: 'event', isActive: false},
   TIME: { name: 'time', isActive: true },
   PRICE: { name: 'price', isActive: true },

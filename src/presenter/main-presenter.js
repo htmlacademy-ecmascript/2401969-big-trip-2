@@ -21,7 +21,7 @@ export default class MainPresenter {
 
   #listComponent = new ListView();
   #noPointComponent = new NoPointView({ messageType: 'EVERYTHING' });
-  #SortViewComponent = null;
+  #sortViewComponent = null;
 
   #pointPresenters = new Map();
 
@@ -97,12 +97,12 @@ export default class MainPresenter {
   }
 
   #renderSortView() {
-    this.#SortViewComponent = new SortView({
+    this.#sortViewComponent = new SortView({
       type: this.#currentSortType,
       onSortTypeChange: this.#handleSortTypeChange,
     });
 
-    render(this.#SortViewComponent, this.#mainContainer);
+    render(this.#sortViewComponent, this.#mainContainer);
   }
 
   #renderPointsListContainer() {
