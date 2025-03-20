@@ -1,7 +1,7 @@
-import AbstractView from '../../framework/view/abstract-view.js';
+import AbstractStatefulView from '../../framework/view/abstract-stateful-view.js';
 import { createSortTemplate } from './sort-view-template.js';
 
-export default class SortView extends AbstractView {
+export default class SortView extends AbstractStatefulView {
   #type = null;
   #handleSortTypeChange = null;
 
