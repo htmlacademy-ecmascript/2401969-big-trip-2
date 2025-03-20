@@ -10,17 +10,16 @@ const DATE_FORMAT = 'MMM D';
 const humanizeDate = (dueDate) =>
   dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
 
-const getDuration = (start, end) => {
-  const duration = dayjs.duration(dayjs(end).diff(dayjs(start)));
-  if (duration.days()) {
-    return duration.format('DD[d] HH[h] mm[m]');
-  }
-  if (duration.hours()) {
-    return duration.format('HH[h] mm[m]');
-  }
+function getDuration(dateFrom, dateTo) {
+  const date1 = dayjs(dateTo);
+  const date2 = dayjs(dateFrom);
 
-  return duration.format('mm[m]');
-};
+  const days = date1.diff(date2, 'day');
+  const hours = date1.diff(date2.add(days, 'day'), 'hour');
+  const minutes = date1.diff(date2.add(days, 'day').add(hours, 'hour'), 'minute');
+
+  return `${days ? `${days}D` : ''} ${hours ? `${hours}H` : ''} ${minutes}`;
+}
 
 const capitalize = (string) => string[0].toUpperCase() + string.slice(1);
 

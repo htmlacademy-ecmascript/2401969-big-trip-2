@@ -27,11 +27,11 @@ function createOffersTemplate(typeOffers, pointOffers) {
   <div class="event__available-offers">
                     ${typeOffers
     .map(({ id, title, price }) => {
-      const checked = pointOffers.includes(id)
+      const isChecked = pointOffers.includes(id)
         ? 'checked'
         : '';
       return `<div class="event__offer-selector">
-                                          <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${id}" ${checked}>
+                                          <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${id}" ${isChecked}>
                                           <label class="event__offer-label" for="${id}">
                                             <span class="event__offer-title">${title}</span>
                                             &plus;&euro;&nbsp;
@@ -97,11 +97,11 @@ function createEditPointTemplate(point, destinations, offers) {
                   </div>
 
                   <div class="event__field-group  event__field-group--time">
-                    <label class="visually-hidden" for="event-start-time-${id}">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${dateStart}">
+                    <label class="visually-hidden" for="event-start-time">From</label>
+                    <input class="event__input  event__input--time" id="event-start-time" type="text" name="event-start-time" value="${dateStart}">
                     &mdash;
-                    <label class="visually-hidden" for="event-end-time-${id}">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${dateFinish}">
+                    <label class="visually-hidden" for="event-end-time">To</label>
+                    <input class="event__input  event__input--time" id="event-end-time" type="text" name="event-end-time" value="${dateFinish}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">

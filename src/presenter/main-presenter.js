@@ -1,9 +1,9 @@
-import AddPointView from '../view/add-point-view/add-point-view';
+//import AddPointView from '../view/add-point-view/add-point-view';
 import ListView from '../view/list-view/list-view';
 import SortView from '../view/sort-view/sort-view';
 import NoPointView from '../view/no-points-view/no-points-view';
 import { render } from '../framework/render';
-import { RenderPosition } from '../framework/render';
+//import { RenderPosition } from '../framework/render';
 import { SortType } from '../const';
 import PointPresenter from './point-presenter';
 import { updateItem, sortPointByDate, sortPointByPrice, sortPointByTime } from '../utils';
@@ -107,7 +107,7 @@ export default class MainPresenter {
 
   #renderPointsListContainer() {
     render(this.#listComponent, this.#mainContainer);
-    this.#renderAddPoint();
+    //this.#renderAddPoint();
     this.#renderPointsList();
   }
 
@@ -117,7 +117,7 @@ export default class MainPresenter {
     }
   }
 
-  #renderAddPoint() {
+  /*#renderAddPoint() {
     const addPointComponent = new AddPointView({
       destinations: this.#destinations,
       offers: this.#offers,
@@ -128,7 +128,7 @@ export default class MainPresenter {
       this.#listComponent.element,
       RenderPosition.AFTERBEGIN
     );
-  }
+  }*/
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
