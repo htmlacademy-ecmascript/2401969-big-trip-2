@@ -113,7 +113,7 @@ export default class EditPointView extends AbstractStatefulView {
         enableTime: true,
         dateFormat: 'd/m/y H:i',
         defaultDate: this._state.dateFrom,
-        onChange: this.#onDateStartChange,
+        onClose: this.#onDateStartChange,
       }
     );
     this.#datepickerFinish = flatpickr(
@@ -122,7 +122,7 @@ export default class EditPointView extends AbstractStatefulView {
         dateFormat: 'd/m/y H:i',
         defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
-        onChange: this.#onDateFinishChange,
+        onClose: this.#onDateFinishChange,
       }
     );
   }

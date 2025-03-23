@@ -113,6 +113,18 @@ const SortType = {
   OFFERS: { name: 'offers', isActive: false },
 };
 
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+const UpdateType = {
+  POINT: 'POINT',
+  POINTS_LIST: 'POINTS_LIST',
+  MAIN_COMPONENT: 'MAIN_COMPONENT',
+};
+
 export {
   DateRange,
   DESTINATION_VALUES,
@@ -125,4 +137,6 @@ export {
   FilterType,
   FilterMessage,
   SortType,
+  UserAction,
+  UpdateType,
 };

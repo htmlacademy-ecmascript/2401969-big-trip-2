@@ -2,6 +2,7 @@ import { remove, render, replace } from '../framework/render';
 import { isEscKey } from '../utils';
 import PointView from '../view/point-view/point-view';
 import EditPointView from '../view/edit-point-view/edit-point-view';
+import { UpdateType, UserAction } from '../const';
 
 const Mode = {
   VIEW: 'VIEW',
@@ -112,11 +113,18 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.POINT,
+      {...this.#point, isFavorite: !this.#point.isFavorite}
+    );
   };
 
   #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.POINT,
+      point);
     this.#replaceToView();
   };
 
