@@ -1,7 +1,7 @@
 import { createPoint } from '../mock/mockPoint';
 import Observable from '../framework/observable.js';
 
-const POINS_QTY = 10;
+const POINS_QTY = 3;
 
 export default class PointsModel extends Observable {
   #points = Array.from({ length: POINS_QTY }, createPoint);
@@ -11,15 +11,12 @@ export default class PointsModel extends Observable {
   }
 
   updatePoint(updateType, update) {
-    //Ищем точку по уникальному id
     const index = this.#points.findIndex((point) => point.id === update.id);
 
-    //Если не находим - выбрасываем ошибку
     if (index === -1) {
       throw new Error('Can\'t update unexisting point');
     }
 
-    //Начинаем выплнять обновление
     this.#points = [
       ...this.#points.slice(0, index),
       update,

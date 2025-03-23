@@ -2,7 +2,7 @@
 import ListView from '../view/list-view/list-view';
 import SortView from '../view/sort-view/sort-view';
 import NoPointView from '../view/no-points-view/no-points-view';
-import { render } from '../framework/render';
+import { render, remove } from '../framework/render';
 //import { RenderPosition } from '../framework/render';
 import { SortType, UpdateType, UserAction } from '../const';
 import PointPresenter from './point-presenter';
@@ -94,8 +94,12 @@ export default class MainPresenter {
         this.#pointPresenters.get(data.id).init(data);
         break;
       case UpdateType.POINTS_LIST:
+        this.#clearBoard();
+        this.#renderMainComponents();
         break;
       case UpdateType.MAIN_COMPONENT:
+        this.#clearBoard({resetSortType: true});
+        this.#renderMainComponents();
         break;
     }
   };
@@ -107,9 +111,8 @@ export default class MainPresenter {
     }
 
     this.#currentSortType = sortType;
-
-    this.#clearPointsList();
-
+    this.#clearBoard();
+    this.#renderSortView();
     this.#renderPointsList();
   };
 
@@ -129,8 +132,10 @@ export default class MainPresenter {
   #renderPointsList() {
     render(this.#listComponent, this.#mainContainer);
 
-    for (let i = 0; i < this.#pointsModel.points.length; i++) {
-      this.#renderPoint(this.#pointsModel.points[i]);
+    const points = this.points;
+
+    for (let i = 0; i < points.length; i++) {
+      this.#renderPoint(points[i]);
     }
   }
 
@@ -159,8 +164,15 @@ export default class MainPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #clearPointsList() {
+  #clearBoard({resetSortType = false} = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+
+    remove(this.#sortViewComponent);
+    remove(this.#listComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DAY;
+    }
   }
 }

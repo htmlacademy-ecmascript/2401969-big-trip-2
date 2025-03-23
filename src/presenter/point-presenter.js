@@ -1,5 +1,5 @@
 import { remove, render, replace } from '../framework/render';
-import { isEscKey } from '../utils';
+import { isEscKey, isDatesEqual } from '../utils';
 import PointView from '../view/point-view/point-view';
 import EditPointView from '../view/edit-point-view/edit-point-view';
 import { UpdateType, UserAction } from '../const';
@@ -55,6 +55,7 @@ export default class PointPresenter {
       offers: this.#offers,
       onSubmit: this.#handleFormSubmit,
       onEditClose: this.#handleEditClose,
+      onDeliteClick: this.#handleDeliteClick,
     });
 
     if(prevPointComponent === null || prevEditPointComponent === null) {
@@ -120,16 +121,28 @@ export default class PointPresenter {
     );
   };
 
-  #handleFormSubmit = (point) => {
+  #handleFormSubmit = (update) => {
+    const isMinorUpdate =
+      this.#point.basePrice !== update.basePrice ||
+      !isDatesEqual(this.#point.dateFrom, update.dateFrom) ||
+      !isDatesEqual(this.#point.dateTo, update.dateTo);
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
-      UpdateType.POINT,
-      point);
+      isMinorUpdate ? UpdateType.POINTS_LIST : UpdateType.POINT,
+      update,);
     this.#replaceToView();
   };
 
   #handleEditClose = () => {
     this.#editPointComponent.reset(this.#point);
     this.#replaceToView();
+  };
+
+  #handleDeliteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.POINTS_LIST,
+      point,
+    );
   };
 }

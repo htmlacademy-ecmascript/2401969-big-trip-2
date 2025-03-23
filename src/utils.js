@@ -48,6 +48,10 @@ function isDatesCurrent(startDate, endDate) {
   return now.isBetween(dayjs(startDate), dayjs(endDate), 'day', '[]');
 }
 
+function isDatesEqual(dateA, dateB) {
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+}
+
 const filters = {
   [FilterType.EVERYTHING]: (points) => points,
   [FilterType.FUTURE]: (points) =>
@@ -103,6 +107,7 @@ export {
   getRandomBoolean,
   humanizeDate,
   getDuration,
+  isDatesEqual,
   calculatesTravelTime,
   filters,
   sortPointByDate,
