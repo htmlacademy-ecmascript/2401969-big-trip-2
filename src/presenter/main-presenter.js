@@ -7,12 +7,14 @@ import { render, remove } from '../framework/render';
 import { SortType, UpdateType, UserAction } from '../const';
 import PointPresenter from './point-presenter';
 import { sortPointByDate, sortPointByPrice, sortPointByTime } from '../utils';
+import { filter } from '../utils';
 
 export default class MainPresenter {
   #mainContainer = null;
   #pointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
+  #filterModel = null;
 
   #offers = [];
   #destinations = [];
@@ -25,25 +27,32 @@ export default class MainPresenter {
 
   #currentSortType = SortType.DAY.name;
 
-  constructor({ mainContainer, pointsModel, destinationsModel, offersModel }) {
+  constructor({ mainContainer, pointsModel, destinationsModel, offersModel, filterModel }) {
     this.#mainContainer = mainContainer;
     this.#pointsModel = pointsModel;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
+    this.#filterModel = filterModel;
+
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+    const filterType = this.#filterModel.filter;
+    const points = this.#pointsModel.points;
+    const filteredPoints = filter[filterType](points);
+
     switch (this.#currentSortType) {
       case SortType.DAY.name:
-        return [...this.#pointsModel.points].sort(sortPointByDate);
+        return filteredPoints.sort(sortPointByDate);
       case SortType.TIME.name:
-        return [...this.#pointsModel.points].sort(sortPointByTime);
+        return filteredPoints.sort(sortPointByTime);
       case SortType.PRICE.name:
-        return [...this.#pointsModel.points].sort(sortPointByPrice);
+        return filteredPoints.sort(sortPointByPrice);
     }
 
-    return this.#pointsModel.points;
+    return filteredPoints;
   }
 
   init() {
@@ -63,10 +72,6 @@ export default class MainPresenter {
 
     this.#renderPointsList();
   }
-
-  #handlePointChange = (updatePoint) => {
-    this.#pointPresenters.get(updatePoint.id).init(updatePoint);
-  };
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
@@ -125,17 +130,17 @@ export default class MainPresenter {
       type: this.#currentSortType,
       onSortTypeChange: this.#handleSortTypeChange,
     });
-
     render(this.#sortViewComponent, this.#mainContainer);
+
   }
 
   #renderPointsList() {
     render(this.#listComponent, this.#mainContainer);
 
-    const points = this.points;
+    //const points = this.points;
 
-    for (let i = 0; i < points.length; i++) {
-      this.#renderPoint(points[i]);
+    for (let i = 0; i < this.points.length; i++) {
+      this.#renderPoint(this.points[i]);
     }
   }
 

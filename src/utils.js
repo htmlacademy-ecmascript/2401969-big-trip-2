@@ -52,7 +52,7 @@ function isDatesEqual(dateA, dateB) {
   return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
 }
 
-const filters = {
+const filter = {
   [FilterType.EVERYTHING]: (points) => points,
   [FilterType.FUTURE]: (points) =>
     points.filter((point) => isDatesPlanned(point.dateTo)),
@@ -109,7 +109,7 @@ export {
   getDuration,
   isDatesEqual,
   calculatesTravelTime,
-  filters,
+  filter,
   sortPointByDate,
   sortPointByPrice,
   sortPointByTime,
