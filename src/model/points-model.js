@@ -1,7 +1,7 @@
 import { createPoint } from '../mock/mockPoint';
 import Observable from '../framework/observable.js';
 
-const POINS_QTY = 10;
+const POINS_QTY = 0;
 
 export default class PointsModel extends Observable {
   #points = Array.from({ length: POINS_QTY }, createPoint);

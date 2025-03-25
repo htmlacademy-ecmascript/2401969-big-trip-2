@@ -4,10 +4,10 @@ import SortView from '../view/sort-view/sort-view';
 import NoPointView from '../view/no-points-view/no-points-view';
 import { render, remove } from '../framework/render';
 //import { RenderPosition } from '../framework/render';
-import { SortType, UpdateType, UserAction } from '../const';
+import { SortType, UpdateType, UserAction, FilterType } from '../const';
 import PointPresenter from './point-presenter';
-import { sortPointByDate, sortPointByPrice, sortPointByTime } from '../utils';
-import { filter } from '../utils';
+import { sortPointByDate, sortPointByPrice, sortPointByTime, filter } from '../utils';
+//import { filter } from '../utils';
 
 export default class MainPresenter {
   #mainContainer = null;
@@ -20,12 +20,13 @@ export default class MainPresenter {
   #destinations = [];
 
   #listComponent = new ListView();
-  #noPointComponent = new NoPointView({ messageType: 'EVERYTHING' });
+  #noPointComponent = null;
   #sortViewComponent = null;
 
   #pointPresenters = new Map();
 
   #currentSortType = SortType.DAY.name;
+  #filterType = FilterType.EVERYTHING;
 
   constructor({ mainContainer, pointsModel, destinationsModel, offersModel, filterModel }) {
     this.#mainContainer = mainContainer;
@@ -39,9 +40,9 @@ export default class MainPresenter {
   }
 
   get points() {
-    const filterType = this.#filterModel.filter;
+    this.#filterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
-    const filteredPoints = filter[filterType](points);
+    const filteredPoints = filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
       case SortType.DAY.name:
@@ -63,7 +64,7 @@ export default class MainPresenter {
   }
 
   #renderMainComponents() {
-    if (this.#pointsModel.points.length === 0) {
+    if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
     }
@@ -122,6 +123,9 @@ export default class MainPresenter {
   };
 
   #renderNoPoints() {
+    this.#noPointComponent = new NoPointView({
+      filterType: this.#filterType
+    });
     render(this.#noPointComponent, this.#mainContainer);
   }
 
@@ -175,6 +179,10 @@ export default class MainPresenter {
 
     remove(this.#sortViewComponent);
     remove(this.#listComponent);
+
+    if (this.#noPointComponent) {
+      remove(this.#noPointComponent);
+    }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
