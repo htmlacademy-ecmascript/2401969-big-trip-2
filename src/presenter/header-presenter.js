@@ -45,7 +45,7 @@ export default class HeaderPresenter {
 
   #renderAddPointButton() {
     this.addPointButtonComponent = new AddPointButtonView({
-      onClick: this.#handleAddPointButtonClick
+      onClick: this.handleAddPointButtonClick
     });
     render(this.addPointButtonComponent, this.#headerContainer);
   }
