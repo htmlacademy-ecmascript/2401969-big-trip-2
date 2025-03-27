@@ -4,7 +4,6 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 export default class EditPointView extends AbstractStatefulView {
-  //#point = null;
   #destinations = null;
   #offers = null;
   #handleSubmit = null;
@@ -16,12 +15,13 @@ export default class EditPointView extends AbstractStatefulView {
 
   constructor({ point, destinations, offers, onSubmit, onEditClose, onDeliteClick }) {
     super();
-    this._setState(EditPointView.parsePointToState(point));
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleSubmit = onSubmit;
     this.#handleEditClose = onEditClose;
     this.#handleDeliteClick = onDeliteClick;
+
+    this._setState(EditPointView.parsePointToState(point));
     this._restoreHandlers();
   }
 
@@ -35,7 +35,6 @@ export default class EditPointView extends AbstractStatefulView {
 
   _restoreHandlers() {
     this.element.addEventListener('submit', this.#onSubmitClick);
-    //this.element.addEventListener('reset', this.#onCloseEditClick);
     this.element
       .querySelector('.event__rollup-btn')
       .addEventListener('click', this.#onCloseEditClick);

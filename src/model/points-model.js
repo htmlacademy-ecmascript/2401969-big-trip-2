@@ -1,13 +1,27 @@
 import { createPoint } from '../mock/mockPoint';
 import Observable from '../framework/observable.js';
+import dayjs from 'dayjs';
 
-const POINS_QTY = 0;
+const POINS_QTY = 2;
 
 export default class PointsModel extends Observable {
   #points = Array.from({ length: POINS_QTY }, createPoint);
 
   get points() {
     return this.#points;
+  }
+
+  get newPoint() {
+    return {
+      id: 'new',
+      basePrice: 0,
+      dateFrom: dayjs().toISOString(),
+      dateTo: dayjs().toISOString(),
+      destination: '',
+      isFavorite: false,
+      offers: [],
+      type: 'flight',
+    };
   }
 
   updatePoint(updateType, update) {

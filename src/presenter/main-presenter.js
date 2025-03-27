@@ -2,6 +2,7 @@
 import ListView from '../view/list-view/list-view';
 import SortView from '../view/sort-view/sort-view';
 import NoPointView from '../view/no-points-view/no-points-view';
+import AddPointPresenter from './add-point-presenter';
 import { render, remove } from '../framework/render';
 //import { RenderPosition } from '../framework/render';
 import { SortType, UpdateType, UserAction, FilterType } from '../const';
@@ -24,6 +25,7 @@ export default class MainPresenter {
   #sortViewComponent = null;
 
   #pointPresenters = new Map();
+  #addPointPresenter = null;
 
   #currentSortType = SortType.DAY.name;
   #filterType = FilterType.EVERYTHING;
@@ -57,9 +59,8 @@ export default class MainPresenter {
   }
 
   init() {
-    //this.#pointsList = [...this.#pointsModel.points];
-    this.#destinations = [...this.#destinationsModel.destinations];
-    this.#offers = [...this.#offersModel.offers];
+    this.#destinations = this.#destinationsModel.destinations;
+    this.#offers = this.#offersModel.offers;
     this.#renderMainComponents();
   }
 
@@ -138,34 +139,32 @@ export default class MainPresenter {
 
   }
 
+  renderAddPoint() {
+    this.#currentSortType = SortType.DAY.name;
+    this.#filterModel.setFilter(UpdateType.MAIN_COMPONENT, FilterType.EVERYTHING);
+    this.#addPointPresenter = new AddPointPresenter({
+      pointsListContainer: this.#listComponent.element,
+      point: this.#pointsModel.newPoint,
+      offers: this.#offers,
+      destinations: this.#destinations,
+      onDataChange: this.#handleViewAction,
+    });
+    this.#addPointPresenter.init();
+  }
+
   #renderPointsList() {
     render(this.#listComponent, this.#mainContainer);
-
-    //const points = this.points;
 
     for (let i = 0; i < this.points.length; i++) {
       this.#renderPoint(this.points[i]);
     }
   }
 
-  /*#renderAddPoint() {
-    const addPointComponent = new AddPointView({
-      destinations: this.#destinations,
-      offers: this.#offers,
-    });
-
-    render(
-      addPointComponent,
-      this.#listComponent.element,
-      RenderPosition.AFTERBEGIN
-    );
-  }*/
-
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointsListContainer: this.#listComponent.element,
-      offers: this.#offers,
       destinations: this.#destinations,
+      offers: this.#offers,
       onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
     });
