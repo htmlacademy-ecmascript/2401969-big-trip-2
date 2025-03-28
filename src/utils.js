@@ -33,10 +33,6 @@ const getRandomBoolean = () => Math.random() < 0.5;
 
 const isEscKey = (evt) => evt.key === 'Escape';
 
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
-}
-
 function isDatesPassed(dueDate) {
   const now = dayjs();
   return dayjs(dueDate).isBefore(now, 'day');
@@ -52,14 +48,18 @@ function isDatesCurrent(startDate, endDate) {
   return now.isBetween(dayjs(startDate), dayjs(endDate), 'day', '[]');
 }
 
-const filters = {
+function isDatesEqual(dateA, dateB) {
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+}
+
+const filter = {
   [FilterType.EVERYTHING]: (points) => points,
   [FilterType.FUTURE]: (points) =>
-    points.filter((point) => isDatesPlanned(point.dateTo)),
+    points.filter((point) => isDatesPlanned(point.dateFrom)),
   [FilterType.PRESENT]: (points) =>
     points.filter((point) => isDatesCurrent(point.dateFrom, point.dateTo)),
   [FilterType.PAST]: (points) =>
-    points.filter((point) => isDatesPassed(point.dateFrom)),
+    points.filter((point) => isDatesPassed(point.dateTo)),
 };
 
 function getWeightForNullDate(dateA, dateB) {
@@ -84,9 +84,9 @@ function calculatesTravelTime(dateFrom, dateTo) {
 }
 
 function sortPointByDate(pointA, pointB) {
-  const weight = getWeightForNullDate(pointA.dateTo, pointB.dateTo);
+  const weight = getWeightForNullDate(pointA.dateFrom, pointB.dateFrom);
 
-  return weight ?? dayjs(pointB.dateTo).diff(dayjs(pointA.dateTo));
+  return weight ?? dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom));
 }
 
 function sortPointByPrice(pointA, pointB) {
@@ -107,9 +107,9 @@ export {
   getRandomBoolean,
   humanizeDate,
   getDuration,
+  isDatesEqual,
   calculatesTravelTime,
-  filters,
-  updateItem,
+  filter,
   sortPointByDate,
   sortPointByPrice,
   sortPointByTime,

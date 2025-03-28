@@ -1,7 +1,8 @@
 import { remove, render, replace } from '../framework/render';
-import { isEscKey } from '../utils';
+import { isEscKey, isDatesEqual } from '../utils';
 import PointView from '../view/point-view/point-view';
 import EditPointView from '../view/edit-point-view/edit-point-view';
+import { UpdateType, UserAction } from '../const';
 
 const Mode = {
   VIEW: 'VIEW',
@@ -9,7 +10,7 @@ const Mode = {
 };
 
 export default class PointPresenter {
-  #pointListContainer = null;
+  #pointsListContainer = null;
   #handleDataChange = null;
   #handleModeChange = null;
 
@@ -23,7 +24,7 @@ export default class PointPresenter {
   #mode = Mode.VIEW;
 
   constructor({pointsListContainer, destinations, offers, onDataChange, onModeChange}) {
-    this.#pointListContainer = pointsListContainer;
+    this.#pointsListContainer = pointsListContainer;
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleDataChange = onDataChange;
@@ -54,10 +55,11 @@ export default class PointPresenter {
       offers: this.#offers,
       onSubmit: this.#handleFormSubmit,
       onEditClose: this.#handleEditClose,
+      onDeliteClick: this.#handleDeliteClick,
     });
 
     if(prevPointComponent === null || prevEditPointComponent === null) {
-      render(this.#pointComponent, this.#pointListContainer);
+      render(this.#pointComponent, this.#pointsListContainer);
       return;
     }
 
@@ -112,16 +114,35 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.POINT,
+      {...this.#point, isFavorite: !this.#point.isFavorite}
+    );
   };
 
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+  #handleFormSubmit = (update) => {
+    const isMinorUpdate =
+      this.#point.basePrice !== update.basePrice ||
+      !isDatesEqual(this.#point.dateFrom, update.dateFrom) ||
+      !isDatesEqual(this.#point.dateTo, update.dateTo);
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      isMinorUpdate ? UpdateType.POINTS_LIST : UpdateType.POINT,
+      update,);
     this.#replaceToView();
   };
 
   #handleEditClose = () => {
     this.#editPointComponent.reset(this.#point);
     this.#replaceToView();
+  };
+
+  #handleDeliteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.POINTS_LIST,
+      point,
+    );
   };
 }

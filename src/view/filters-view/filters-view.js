@@ -3,12 +3,24 @@ import { createFiltersTemplate } from './filters-view-template.js';
 
 export default class FiltersView extends AbstractView {
   #filters = null;
-  constructor({ filters }) {
+  #currentFilter = null;
+  #handleFilterTypeChange = null;
+
+  constructor({ filters, currentFilterType, onFilterTypeChange }) {
     super();
     this.#filters = filters;
+    this.#currentFilter = currentFilterType;
+    this.#handleFilterTypeChange = onFilterTypeChange;
+
+    this.element.addEventListener('change', this.#filterTypeChangeHandler);
   }
 
   get template() {
-    return createFiltersTemplate(this.#filters);
+    return createFiltersTemplate(this.#filters, this.#currentFilter);
   }
+
+  #filterTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFilterTypeChange(evt.target.value);
+  };
 }

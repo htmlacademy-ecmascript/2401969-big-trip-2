@@ -4,22 +4,24 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 export default class EditPointView extends AbstractStatefulView {
-  //#point = null;
   #destinations = null;
   #offers = null;
   #handleSubmit = null;
   #handleEditClose = null;
+  #handleDeliteClick = null;
 
   #datepickerStart = null;
   #datepickerFinish = null;
 
-  constructor({ point, destinations, offers, onSubmit, onEditClose }) {
+  constructor({ point, destinations, offers, onSubmit, onEditClose, onDeliteClick }) {
     super();
-    this._setState(EditPointView.parsePointToState(point));
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleSubmit = onSubmit;
     this.#handleEditClose = onEditClose;
+    this.#handleDeliteClick = onDeliteClick;
+
+    this._setState(EditPointView.parsePointToState(point));
     this._restoreHandlers();
   }
 
@@ -33,10 +35,10 @@ export default class EditPointView extends AbstractStatefulView {
 
   _restoreHandlers() {
     this.element.addEventListener('submit', this.#onSubmitClick);
-    //this.element.addEventListener('reset', this.#onCloseEditClick);
     this.element
       .querySelector('.event__rollup-btn')
       .addEventListener('click', this.#onCloseEditClick);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#onDeliteClick);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#onTypeChangeClick);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#onDestynationChangeClick);
     //this.element.querySelector('.event__offer-label').addEventListener('click', this.#onOfferClick);
@@ -64,6 +66,11 @@ export default class EditPointView extends AbstractStatefulView {
   #onCloseEditClick = (evt) => {
     evt.preventDefault();
     this.#handleEditClose();
+  };
+
+  #onDeliteClick = (evt) => {
+    evt.preventDefault();
+    this.#handleDeliteClick(EditPointView.parseStateToPoint(this._state));
   };
 
   #onTypeChangeClick = (evt) => {
@@ -113,7 +120,7 @@ export default class EditPointView extends AbstractStatefulView {
         enableTime: true,
         dateFormat: 'd/m/y H:i',
         defaultDate: this._state.dateFrom,
-        onChange: this.#onDateStartChange,
+        onClose: this.#onDateStartChange,
       }
     );
     this.#datepickerFinish = flatpickr(
@@ -122,7 +129,7 @@ export default class EditPointView extends AbstractStatefulView {
         dateFormat: 'd/m/y H:i',
         defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
-        onChange: this.#onDateFinishChange,
+        onClose: this.#onDateFinishChange,
       }
     );
   }

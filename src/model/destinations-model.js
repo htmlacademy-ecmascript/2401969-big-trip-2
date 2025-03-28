@@ -6,4 +6,13 @@ export default class DestinationsModel {
   get destinations() {
     return this.#destinations;
   }
+
+  get newDestination() {
+    return {
+      id: null,
+      name: '',
+      description: '',
+      pictures: []
+    };
+  }
 }

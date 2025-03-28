@@ -1,26 +1,35 @@
-import FiltersView from '../view/filters-view/filters-view';
-import { createFilters } from '../mock/mockFilters';
-import { render } from '../framework/render';
+import FiltersPresenter from './filters-presenter';
+//import MainPresenter from './main-presenter';
+
 
 export default class HeaderPresenter {
+  #headerContainer = null;
   #filtersContainer = null;
   #pointsModel = null;
+  #filterModel = null;
+  #mainPresenter = null;
 
-  #points = [];
+  addPointButtonComponent = null;
 
-  #filtersComponent = null;
-
-  constructor({ filtersContainer, pointsModel }) {
+  constructor({ headerContainer, filtersContainer, pointsModel, filterModel, mainPresenter }) {
+    this.#headerContainer = headerContainer;
     this.#filtersContainer = filtersContainer;
     this.#pointsModel = pointsModel;
-
-    const filters = createFilters(this.#pointsModel.points);
-
-    this.#filtersComponent = new FiltersView({ filters });
+    this.#filterModel = filterModel;
+    this.#mainPresenter = mainPresenter;
   }
 
   init() {
-    this.#points = [...this.#pointsModel.points];
-    render(this.#filtersComponent, this.#filtersContainer);
+    this.#renderFiltersView();
   }
+
+  #renderFiltersView() {
+    const filtersPresenter = new FiltersPresenter({
+      filtersContainer: this.#filtersContainer,
+      pointsModel: this.#pointsModel,
+      filterModel: this.#filterModel
+    });
+    filtersPresenter.init();
+  }
+
 }
