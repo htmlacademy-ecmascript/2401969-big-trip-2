@@ -16,6 +16,7 @@ const destinationsModel = new DestinationsModel();
 const offersModel = new OffersModel();
 const filterModel = new FilterModel();
 const mainPresenter = new MainPresenter({
+  headerContainer: headerElement,
   mainContainer: containerElement,
   pointsModel,
   destinationsModel,
@@ -27,7 +28,6 @@ const headerPresenter = new HeaderPresenter({
   filtersContainer: filtersElement,
   pointsModel,
   filterModel,
-  mainPresenter,
 });
 
 

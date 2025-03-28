@@ -7,7 +7,7 @@ import { isEscKey, getRandomInteger } from '../utils';
 export default class AddPointPresenter {
   #pointsListContainer = null;
   #handleDataChange = null;
-  #handleDestroy = null;
+  #handleAddPointClose = null;
 
   #point = null;
   #destinations = [];
@@ -15,13 +15,13 @@ export default class AddPointPresenter {
 
   #addPointComponent = null;
 
-  constructor({pointsListContainer, point, destinations, offers, onDataChange, onDestroy}) {
+  constructor({pointsListContainer, point, destinations, offers, onDataChange, onAddPointClose}) {
     this.#pointsListContainer = pointsListContainer;
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleDataChange = onDataChange;
-    this.#handleDestroy = onDestroy;
+    this.#handleAddPointClose = onAddPointClose;
   }
 
   init() {
@@ -55,7 +55,7 @@ export default class AddPointPresenter {
       return;
     }
 
-    //this.#handleDestroy();
+    this.#handleAddPointClose();
 
     remove(this.#addPointComponent);
     this.#addPointComponent = null;

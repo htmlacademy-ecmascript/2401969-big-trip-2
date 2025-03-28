@@ -1,4 +1,5 @@
 //import AddPointView from '../view/add-point-view/add-point-view';
+import AddPointButtonView from '../view/add-point-button-view/add-point-button-view';
 import ListView from '../view/list-view/list-view';
 import SortView from '../view/sort-view/sort-view';
 import NoPointView from '../view/no-points-view/no-points-view';
@@ -11,6 +12,7 @@ import { sortPointByDate, sortPointByPrice, sortPointByTime, filter } from '../u
 //import { filter } from '../utils';
 
 export default class MainPresenter {
+  #headerContainer = null;
   #mainContainer = null;
   #pointsModel = null;
   #destinationsModel = null;
@@ -30,7 +32,8 @@ export default class MainPresenter {
   #currentSortType = SortType.DAY.name;
   #filterType = FilterType.EVERYTHING;
 
-  constructor({ mainContainer, pointsModel, destinationsModel, offersModel, filterModel }) {
+  constructor({ headerContainer, mainContainer, pointsModel, destinationsModel, offersModel, filterModel }) {
+    this.#headerContainer = headerContainer;
     this.#mainContainer = mainContainer;
     this.#pointsModel = pointsModel;
     this.#destinationsModel = destinationsModel;
@@ -61,6 +64,7 @@ export default class MainPresenter {
   init() {
     this.#destinations = this.#destinationsModel.destinations;
     this.#offers = this.#offersModel.offers;
+    this.#renderAddPointButton();
     this.#renderMainComponents();
   }
 
@@ -123,6 +127,22 @@ export default class MainPresenter {
     this.#renderPointsList();
   };
 
+  #renderAddPointButton() {
+    this.addPointButtonComponent = new AddPointButtonView({
+      onClick: this.#handleAddPointButtonClick
+    });
+    render(this.addPointButtonComponent, this.#headerContainer);
+  }
+
+  #handleAddPointButtonClick = () => {
+    this.renderAddPoint();
+    this.addPointButtonComponent.element.disabled = true;
+  };
+
+  #handleAddPointClose = () => {
+    this.addPointButtonComponent.element.disabled = false;
+  };
+
   #renderNoPoints() {
     this.#noPointComponent = new NoPointView({
       filterType: this.#filterType
@@ -140,7 +160,7 @@ export default class MainPresenter {
   }
 
   renderAddPoint() {
-    this.#currentSortType = SortType.DAY.name;
+    this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAIN_COMPONENT, FilterType.EVERYTHING);
     this.#addPointPresenter = new AddPointPresenter({
       pointsListContainer: this.#listComponent.element,
@@ -148,6 +168,7 @@ export default class MainPresenter {
       offers: this.#offers,
       destinations: this.#destinations,
       onDataChange: this.#handleViewAction,
+      onAddPointClose: this.#handleAddPointClose,
     });
     this.#addPointPresenter.init();
   }

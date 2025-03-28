@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { capitalize } from '../../utils';
+import he from 'he';
 
 const createNameTemplate = ({ name }) => `<option value="${name}"></option>`;
 
@@ -124,7 +125,7 @@ function createAddPointTemplate(point, destinations, offers) {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${basePrice}">
+                    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${he.encode(String(basePrice))}">
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

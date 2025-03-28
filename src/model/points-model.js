@@ -2,7 +2,7 @@ import { createPoint } from '../mock/mockPoint';
 import Observable from '../framework/observable.js';
 import dayjs from 'dayjs';
 
-const POINS_QTY = 2;
+const POINS_QTY = 5;
 
 export default class PointsModel extends Observable {
   #points = Array.from({ length: POINS_QTY }, createPoint);
