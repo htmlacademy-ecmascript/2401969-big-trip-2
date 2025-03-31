@@ -18,7 +18,7 @@ const createDestinations = (array) =>
     id: getRandomInteger(1, 100),
     name: array[index],
     description: getRandomArrayElement(DESTINATION_DESCRIPTIONS),
-    photos: Array.from({ length: getRandomInteger(0, 5) }, createPhoto),
+    pictures: Array.from({ length: getRandomInteger(0, 5) }, createPhoto),
   }));
 
 const mockDestinations = createDestinations(DESTINATION_VALUES);

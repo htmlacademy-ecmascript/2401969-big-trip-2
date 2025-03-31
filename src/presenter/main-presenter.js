@@ -3,6 +3,7 @@ import AddPointButtonView from '../view/add-point-button-view/add-point-button-v
 import ListView from '../view/list-view/list-view';
 import SortView from '../view/sort-view/sort-view';
 import NoPointView from '../view/no-points-view/no-points-view';
+//import LoadingView from '../view/loading-view/loading-view';
 import AddPointPresenter from './add-point-presenter';
 import { render, remove } from '../framework/render';
 //import { RenderPosition } from '../framework/render';
@@ -31,6 +32,7 @@ export default class MainPresenter {
 
   #currentSortType = SortType.DAY.name;
   #filterType = FilterType.EVERYTHING;
+  #isLoading = true;
 
   constructor({ headerContainer, mainContainer, pointsModel, destinationsModel, offersModel, filterModel }) {
     this.#headerContainer = headerContainer;
@@ -64,11 +66,17 @@ export default class MainPresenter {
   init() {
     this.#destinations = this.#destinationsModel.destinations;
     this.#offers = this.#offersModel.offers;
+
+
     this.#renderAddPointButton();
     this.#renderMainComponents();
   }
 
   #renderMainComponents() {
+    if(!this.#destinationsModel.destinations || !this.#offersModel.offers) {
+      return;
+    }
+
     if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
@@ -84,7 +92,6 @@ export default class MainPresenter {
   };
 
   #handleViewAction = (actionType, updateType, update) => {
-    //console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsModel.updatePoint(updateType, update);
@@ -99,7 +106,6 @@ export default class MainPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    //console.log(updateType, data);
     switch (updateType) {
       case UpdateType.POINT:
         this.#pointPresenters.get(data.id).init(data);
@@ -112,6 +118,10 @@ export default class MainPresenter {
         this.#clearBoard({resetSortType: true});
         this.#renderMainComponents();
         break;
+      /*case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderMainComponents();*/
     }
   };
 

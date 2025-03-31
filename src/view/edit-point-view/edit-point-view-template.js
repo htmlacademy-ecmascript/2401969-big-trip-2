@@ -4,11 +4,11 @@ import he from 'he';
 
 const createNameTemplate = ({ name }) => `<option value="${name}"></option>`;
 
-const createDestinationPhotoTemplate = (photos) =>
-  photos
+const createDestinationPhotoTemplate = (pictures) =>
+  pictures
     .map(
-      (photo) =>
-        `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`
+      (picture) =>
+        `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`
     )
     .join('');
 
@@ -52,11 +52,11 @@ function createEditPointTemplate(point, destinations, offers) {
   const editPointDestination = destinations.find(
     (destination) => destination.id === point.destination
   );
-  const { name, description, photos } = editPointDestination;
+  const { name, description, pictures } = editPointDestination;
   const namesTemplate = destinations.map((destination) =>
     createNameTemplate(destination)
   );
-  const photoTemplate = createDestinationPhotoTemplate(photos);
+  const photoTemplate = createDestinationPhotoTemplate(pictures);
   const pointOffersByType = offers.find((offer) => offer.type === point.type);
   const typesTemplate = offers
     .map((offer) => createTypeTemplate(offer, id))

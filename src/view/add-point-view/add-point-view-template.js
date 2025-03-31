@@ -4,10 +4,10 @@ import he from 'he';
 
 const createNameTemplate = ({ name }) => `<option value="${name}"></option>`;
 
-function createDestinationPhotoTemplate(photos) {
-  return photos
-    .map((photo) =>
-      `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`
+function createDestinationPhotoTemplate(pictures) {
+  return pictures
+    .map((picture) =>
+      `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`
     )
     .join('');
 }
@@ -29,7 +29,7 @@ function createDestinationTemplate(destination) {
                     <p class="event__destination-description">${destination.description}</p>
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
-                        ${createDestinationPhotoTemplate(destination.photos)}
+                        ${createDestinationPhotoTemplate(destination.pictures)}
                       </div>
                     </div>
                   </section>`;
@@ -66,7 +66,7 @@ function createOffersTemplate(typeOffers, pointOffers) {
 function createAddPointTemplate(point, destinations, offers) {
   const { id, type, basePrice, dateFrom, dateTo } = point;
   const editPointDestination = destinations.find((destination) => destination.id === point.destination) || '';
-  //const { name, description, photos } = editPointDestination;
+  //const { name, description, pictures } = editPointDestination;
   const namesTemplate = destinations.map((destination) =>
     createNameTemplate(destination)
   );
