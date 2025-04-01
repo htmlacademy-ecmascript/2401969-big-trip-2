@@ -4,10 +4,10 @@ import he from 'he';
 
 const createNameTemplate = ({ name }) => `<option value="${name}"></option>`;
 
-function createDestinationPhotoTemplate(photos) {
-  return photos
-    .map((photo) =>
-      `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`
+function createDestinationPhotoTemplate(pictures) {
+  return pictures
+    .map((picture) =>
+      `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`
     )
     .join('');
 }
@@ -29,7 +29,7 @@ function createDestinationTemplate(destination) {
                     <p class="event__destination-description">${destination.description}</p>
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
-                        ${createDestinationPhotoTemplate(destination.photos)}
+                        ${createDestinationPhotoTemplate(destination.pictures)}
                       </div>
                     </div>
                   </section>`;
@@ -44,11 +44,15 @@ function createOffersTemplate(typeOffers, pointOffers) {
   <div class="event__available-offers">
                     ${typeOffers
     .map(({ id, title, price }) => {
-      const isChecked = pointOffers.includes(id)
+      const checked = pointOffers.includes(id)
         ? 'checked'
         : '';
       return `<div class="event__offer-selector">
-                                          <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${id}" ${isChecked}>
+                                          <input class="event__offer-checkbox  visually-hidden"
+                                          id="${id}"
+                                          data-offer-id="${id}"
+                                          type="checkbox" name="event-offer-${id}"
+                                          ${checked}>
                                           <label class="event__offer-label" for="${id}">
                                             <span class="event__offer-title">${title}</span>
                                             &plus;&euro;&nbsp;
@@ -66,11 +70,9 @@ function createOffersTemplate(typeOffers, pointOffers) {
 function createAddPointTemplate(point, destinations, offers) {
   const { id, type, basePrice, dateFrom, dateTo } = point;
   const editPointDestination = destinations.find((destination) => destination.id === point.destination) || '';
-  //const { name, description, photos } = editPointDestination;
   const namesTemplate = destinations.map((destination) =>
     createNameTemplate(destination)
   );
-  //const photoTemplate = editPointDestination ? createDestinationPhotoTemplate(editPointDestination.photos) : '';
   const pointOffersByType = offers.find((offer) => offer.type === point.type);
   const typesTemplate = offers
     .map((offer) => createTypeTemplate(offer, id))

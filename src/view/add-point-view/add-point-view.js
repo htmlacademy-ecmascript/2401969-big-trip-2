@@ -36,22 +36,13 @@ export default class AddPointView extends AbstractStatefulView {
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#onCancelClick);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#onTypeChangeClick);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#onDestynationChangeClick);
-    //this.element.querySelector('.event__offer-label').addEventListener('click', this.#onOfferClick);
+    if (this.element.querySelector('.event__available-offers')) {
+      this.element.querySelector('.event__available-offers')
+        .addEventListener('change', this.#onOfferChange);
+    }
     this.element.querySelector('.event__input--price').addEventListener('change', this.#onPriceChange);
     this.#setDatespicker();
   }
-
-  /*#onOfferClick = () => {
-    console.log('Meow');
-    const checkedOffer = evt.target.id;
-    const pointOffers = this._state.offers;
-    console.log(checkedOffer);
-    console.log(this._state);
-    console.log(pointOffers);
-    if (pointOffers.includes(checkedOffer)) {
-      console.log('Wow');
-    }
-  };*/
 
   #onSubmitClick = (evt) => {
     evt.preventDefault();
@@ -81,7 +72,20 @@ export default class AddPointView extends AbstractStatefulView {
     this.updateElement({
       destination: selectedDestination.id
     });
+  };
 
+  #onOfferChange = (evt) => {
+    const currentOffer = evt.target.dataset.offerId;
+
+    if (evt.target.checked) {
+      this._setState({
+        offers: [...this._state.offers, currentOffer]
+      });
+    } else {
+      this._setState({
+        offers: this._state.offers.filter((offer) => offer !== currentOffer)
+      });
+    }
   };
 
   #onPriceChange = (evt) => {

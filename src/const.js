@@ -123,6 +123,7 @@ const UpdateType = {
   POINT: 'POINT',
   POINTS_LIST: 'POINTS_LIST',
   MAIN_COMPONENT: 'MAIN_COMPONENT',
+  INIT: 'INIT',
 };
 
 export {

@@ -1,7 +1,7 @@
 import { remove, render,RenderPosition } from '../framework/render';
 import AddPointView from '../view/add-point-view/add-point-view';
 import { UserAction, UpdateType } from '../const';
-import { isEscKey, getRandomInteger } from '../utils';
+import { isEscKey, } from '../utils';
 
 
 export default class AddPointPresenter {
@@ -71,7 +71,7 @@ export default class AddPointPresenter {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.POINTS_LIST,
-      {id: getRandomInteger(1, 100), ...point}
+      point,
     );
     this.destroy();
   };
