@@ -32,7 +32,11 @@ function createOffersTemplate(typeOffers, pointOffers) {
         ? 'checked'
         : '';
       return `<div class="event__offer-selector">
-                                          <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${id}" ${isChecked}>
+                                          <input class="event__offer-checkbox  visually-hidden"
+                                          id="${id}"
+                                          data-offer-id="${id}"
+                                          type="checkbox" name="event-offer-${id}"
+                                          ${isChecked}>
                                           <label class="event__offer-label" for="${id}">
                                             <span class="event__offer-title">${title}</span>
                                             &plus;&euro;&nbsp;
@@ -114,7 +118,7 @@ function createEditPointTemplate(point, destinations, offers) {
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Delite</button>
+                  <button class="event__reset-btn" type="reset">Delete</button>
                   <button class="event__rollup-btn" type="button">
                     <span class="visually-hidden">Open event</span>
                   </button>
