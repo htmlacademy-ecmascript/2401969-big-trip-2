@@ -43,25 +43,11 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#onDestynationChangeClick);
     if (this.element.querySelector('.event__available-offers')) {
       this.element.querySelector('.event__available-offers')
-        .addEventListener('change', this.#offerChange);
+        .addEventListener('change', this.#onOfferChange);
     }
     this.element.querySelector('.event__input--price').addEventListener('change', this.#onPriceChange);
     this.#setDatespicker();
   }
-
-  #offerChange = (evt) => {
-    const currentOffer = evt.target.dataset.offerId;
-
-    if (evt.target.checked) {
-      this._setState({
-        offers: [...this._state.offers, currentOffer]
-      });
-    } else {
-      this._setState({
-        offers: this._state.offers.filter((offer) => offer !== currentOffer)
-      });
-    }
-  };
 
   #onSubmitClick = (evt) => {
     evt.preventDefault();
@@ -96,7 +82,20 @@ export default class EditPointView extends AbstractStatefulView {
     this.updateElement({
       destination: selectedDestination.id
     });
+  };
 
+  #onOfferChange = (evt) => {
+    const currentOffer = evt.target.dataset.offerId;
+
+    if (evt.target.checked) {
+      this._setState({
+        offers: [...this._state.offers, currentOffer]
+      });
+    } else {
+      this._setState({
+        offers: this._state.offers.filter((offer) => offer !== currentOffer)
+      });
+    }
   };
 
   #onPriceChange = (evt) => {
