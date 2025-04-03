@@ -106,6 +106,23 @@ export default class PointPresenter {
     }
   }
 
+  setAborting() {
+    if (this.#mode === Mode.VIEW) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(resetFormState);
+  }
+
   #onDocumentEscKeydown = (evt) => {
     if (isEscKey(evt)) {
       evt.preventDefault();

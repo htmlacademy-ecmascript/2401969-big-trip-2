@@ -115,7 +115,8 @@ function createAddPointTemplate(point, destinations, offers) {
                     <input class="event__input  event__input--destination"
                     id="event-destination-${id}" type="text" name="event-destination" value="${editPointDestination?.name || ''}"
                     list="destination-list-${id}"
-                    ${isDisabled ? 'disabled' : ''}>
+                    ${isDisabled ? 'disabled' : ''}
+                    required>
                     <datalist id="destination-list-${id}">
                       ${namesTemplate}
                     </datalist>

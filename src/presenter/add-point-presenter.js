@@ -84,6 +84,18 @@ export default class AddPointPresenter {
     });
   }
 
+  setAborting() {
+    const resetFormState = () => {
+      this.#addPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#addPointComponent.shake(resetFormState);
+  }
+
   #handleCancelClick = () => {
     this.destroy();
   };
