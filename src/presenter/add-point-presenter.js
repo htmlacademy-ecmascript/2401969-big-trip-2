@@ -73,8 +73,28 @@ export default class AddPointPresenter {
       UpdateType.POINTS_LIST,
       point,
     );
-    this.destroy();
+
+    this.#handleAddPointClose();
   };
+
+  setSaving() {
+    this.#addPointComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#addPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#addPointComponent.shake(resetFormState);
+  }
 
   #handleCancelClick = () => {
     this.destroy();

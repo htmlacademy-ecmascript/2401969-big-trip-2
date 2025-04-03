@@ -68,7 +68,8 @@ export default class PointPresenter {
     }
 
     if(this.#mode === Mode.EDIT) {
-      replace(this.#editPointComponent, prevEditPointComponent);
+      replace(this.#pointComponent, prevEditPointComponent);
+      this.#mode = Mode.VIEW;
     }
 
     remove(prevPointComponent);
@@ -85,6 +86,41 @@ export default class PointPresenter {
       this.#editPointComponent.reset(this.#point);
       this.#replaceToView();
     }
+  }
+
+  setSaving() {
+    if (this.#mode === Mode.EDIT) {
+      this.#editPointComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  }
+
+  setDeleting() {
+    if (this.#mode === Mode.EDIT) {
+      this.#editPointComponent.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
+    }
+  }
+
+  setAborting() {
+    if (this.#mode === Mode.VIEW) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(resetFormState);
   }
 
   #onDocumentEscKeydown = (evt) => {
@@ -130,7 +166,7 @@ export default class PointPresenter {
       UserAction.UPDATE_POINT,
       isMinorUpdate ? UpdateType.POINTS_LIST : UpdateType.POINT,
       update,);
-    this.#replaceToView();
+    //this.#replaceToView();
   };
 
   #handleEditClose = () => {
