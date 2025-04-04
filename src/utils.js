@@ -5,10 +5,14 @@ import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 import { FilterType } from './const';
 
-const DATE_FORMAT = 'MMM D';
+//const DATE_FORMAT = 'MMM D';
 
-const humanizeDate = (dueDate) =>
-  dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
+const humanizeDate = (date) =>
+  date ? dayjs(date).format('MMM D') : '';
+
+const getCurrentDate = (date) => dayjs(date).format('DD MMM');
+
+const formatWithLeadingZero = (value) => String(value).padStart(2, '0');
 
 function getDuration(dateFrom, dateTo) {
   const date1 = dayjs(dateTo);
@@ -18,7 +22,11 @@ function getDuration(dateFrom, dateTo) {
   const hours = date1.diff(date2.add(days, 'day'), 'hour');
   const minutes = date1.diff(date2.add(days, 'day').add(hours, 'hour'), 'minute');
 
-  return `${days ? `${days}D` : ''} ${hours ? `${hours}H` : ''} ${minutes}`;
+  const formattedDays = days ? `${formatWithLeadingZero(days)}D` : '';
+  const formattedHours = hours || days ? `${formatWithLeadingZero(hours)}H` : '00H';
+  const formattedMinutes = minutes || hours || days ? `${formatWithLeadingZero(minutes)}M` : '00M';
+
+  return `${formattedDays} ${formattedHours} ${formattedMinutes}`.trim();
 }
 
 const capitalize = (string) => string[0].toUpperCase() + string.slice(1);
@@ -86,7 +94,7 @@ function calculatesTravelTime(dateFrom, dateTo) {
 function sortPointByDate(pointA, pointB) {
   const weight = getWeightForNullDate(pointA.dateFrom, pointB.dateFrom);
 
-  return weight ?? dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom));
+  return weight ?? dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 }
 
 function sortPointByPrice(pointA, pointB) {
@@ -99,12 +107,25 @@ function sortPointByTime(pointA, pointB) {
   return durationB - durationA;
 }
 
+const getOffersByType = (type, offers) => offers.find((offer) => offer.type === type)?.offers || [];
+
+const getTotalBasePrice = (points) => points.reduce((sum, price) => sum + price.basePrice, 0);
+
+const getTotalOffersPrice = (point, allOffers) => {
+  const pointOffers = getOffersByType(point.type, allOffers);
+  const includesPointOffers = pointOffers.filter((offers) => point.offers.includes(offers.id));
+  return includesPointOffers.reduce((sum, currentPoint) => sum + currentPoint.price, 0);
+};
+
+const getDestination = (id, destinations) => destinations.find((destination) => destination.id === id);
+
 export {
   isEscKey,
   capitalize,
   getRandomInteger,
   getRandomArrayElement,
   getRandomBoolean,
+  getCurrentDate,
   humanizeDate,
   getDuration,
   isDatesEqual,
@@ -113,4 +134,7 @@ export {
   sortPointByDate,
   sortPointByPrice,
   sortPointByTime,
+  getTotalBasePrice,
+  getTotalOffersPrice,
+  getDestination,
 };

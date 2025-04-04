@@ -41,7 +41,7 @@ function createPointTemplate(point, destinations, offers) {
                     &mdash;
                     <time class="event__end-time" datetime="${dateTo}">${timeFinish}</time>
                   </p>
-                  <p class="event__duration">${duration}M</p>
+                  <p class="event__duration">${duration}</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

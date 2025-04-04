@@ -38,7 +38,8 @@ export default class MainPresenter {
 
   #currentSortType = SortType.DAY.name;
   #filterType = FilterType.EVERYTHING;
-  #isLoading = true;#uiBlocker = new UiBlocker({
+  #isLoading = true;
+  #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
   });
@@ -82,12 +83,7 @@ export default class MainPresenter {
   }
 
   #renderMainComponents() {
-    if(!this.#destinationsModel.destinations || !this.#offersModel.offers) {
-      return;
-    }
-
-    if (this.points.length === 0) {
-      this.#renderNoPoints();
+    if(!this.#destinations || !this.#offers) {
       return;
     }
 
@@ -174,6 +170,7 @@ export default class MainPresenter {
   };
 
   #handleAddPointClose = () => {
+    this.#renderPointsList();
     this.addPointButtonComponent.element.disabled = false;
   };
 
@@ -190,25 +187,32 @@ export default class MainPresenter {
       onSortTypeChange: this.#handleSortTypeChange,
     });
     render(this.#sortViewComponent, this.#mainContainer);
-
   }
 
   renderAddPoint() {
-    this.#currentSortType = SortType.DAY;
+    this.#currentSortType = SortType.DAY.name;
     this.#filterModel.setFilter(UpdateType.MAIN_COMPONENT, FilterType.EVERYTHING);
     this.#addPointPresenter = new AddPointPresenter({
       pointsListContainer: this.#listComponent.element,
       point: this.#pointsModel.newPoint,
-      offers: this.#offers,
       destinations: this.#destinations,
+      offers: this.#offers,
       onDataChange: this.#handleViewAction,
       onAddPointClose: this.#handleAddPointClose,
     });
+    if (this.#noPointComponent) {
+      remove(this.#noPointComponent);
+    }
     this.#addPointPresenter.init();
   }
 
   #renderPointsList() {
     render(this.#listComponent, this.#mainContainer);
+
+    if (this.points.length === 0) {
+      this.#renderNoPoints();
+      return;
+    }
 
     for (let i = 0; i < this.points.length; i++) {
       this.#renderPoint(this.points[i]);
@@ -239,7 +243,7 @@ export default class MainPresenter {
     }
 
     if (resetSortType) {
-      this.#currentSortType = SortType.DAY;
+      this.#currentSortType = SortType.DAY.name;
     }
   }
 }
