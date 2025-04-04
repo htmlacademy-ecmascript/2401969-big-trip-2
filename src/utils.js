@@ -10,6 +10,8 @@ const DATE_FORMAT = 'MMM D';
 const humanizeDate = (dueDate) =>
   dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
 
+const formatWithLeadingZero = (value) => String(value).padStart(2, '0');
+
 function getDuration(dateFrom, dateTo) {
   const date1 = dayjs(dateTo);
   const date2 = dayjs(dateFrom);
@@ -18,7 +20,11 @@ function getDuration(dateFrom, dateTo) {
   const hours = date1.diff(date2.add(days, 'day'), 'hour');
   const minutes = date1.diff(date2.add(days, 'day').add(hours, 'hour'), 'minute');
 
-  return `${days ? `${days}D` : ''} ${hours ? `${hours}H` : ''} ${minutes}`;
+  const formattedDays = days ? `${formatWithLeadingZero(days)}D` : '';
+  const formattedHours = hours || days ? `${formatWithLeadingZero(hours)}H` : '00H';
+  const formattedMinutes = minutes || hours || days ? `${formatWithLeadingZero(minutes)}M` : '00M';
+
+  return `${formattedDays} ${formattedHours} ${formattedMinutes}`.trim();
 }
 
 const capitalize = (string) => string[0].toUpperCase() + string.slice(1);
@@ -86,7 +92,7 @@ function calculatesTravelTime(dateFrom, dateTo) {
 function sortPointByDate(pointA, pointB) {
   const weight = getWeightForNullDate(pointA.dateFrom, pointB.dateFrom);
 
-  return weight ?? dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom));
+  return weight ?? dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 }
 
 function sortPointByPrice(pointA, pointB) {

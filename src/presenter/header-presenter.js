@@ -11,12 +11,11 @@ export default class HeaderPresenter {
 
   addPointButtonComponent = null;
 
-  constructor({ headerContainer, filtersContainer, pointsModel, filterModel, mainPresenter }) {
+  constructor({ headerContainer, filtersContainer, pointsModel, filterModel, }) {
     this.#headerContainer = headerContainer;
     this.#filtersContainer = filtersContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
-    this.#mainPresenter = mainPresenter;
   }
 
   init() {
