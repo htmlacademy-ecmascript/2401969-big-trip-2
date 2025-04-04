@@ -5,10 +5,12 @@ import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 import { FilterType } from './const';
 
-const DATE_FORMAT = 'MMM D';
+//const DATE_FORMAT = 'MMM D';
 
-const humanizeDate = (dueDate) =>
-  dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
+const humanizeDate = (date) =>
+  date ? dayjs(date).format('MMM D') : '';
+
+const getCurrentDate = (date) => dayjs(date).format('DD MMM');
 
 const formatWithLeadingZero = (value) => String(value).padStart(2, '0');
 
@@ -105,12 +107,25 @@ function sortPointByTime(pointA, pointB) {
   return durationB - durationA;
 }
 
+const getOffersByType = (type, offers) => offers.find((offer) => offer.type === type)?.offers || [];
+
+const getTotalBasePrice = (points) => points.reduce((sum, price) => sum + price.basePrice, 0);
+
+const getTotalOffersPrice = (point, allOffers) => {
+  const pointOffers = getOffersByType(point.type, allOffers);
+  const includesPointOffers = pointOffers.filter((offers) => point.offers.includes(offers.id));
+  return includesPointOffers.reduce((sum, currentPoint) => sum + currentPoint.price, 0);
+};
+
+const getDestination = (id, destinations) => destinations.find((destination) => destination.id === id);
+
 export {
   isEscKey,
   capitalize,
   getRandomInteger,
   getRandomArrayElement,
   getRandomBoolean,
+  getCurrentDate,
   humanizeDate,
   getDuration,
   isDatesEqual,
@@ -119,4 +134,7 @@ export {
   sortPointByDate,
   sortPointByPrice,
   sortPointByTime,
+  getTotalBasePrice,
+  getTotalOffersPrice,
+  getDestination,
 };

@@ -38,7 +38,8 @@ export default class MainPresenter {
 
   #currentSortType = SortType.DAY.name;
   #filterType = FilterType.EVERYTHING;
-  #isLoading = true;#uiBlocker = new UiBlocker({
+  #isLoading = true;
+  #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
   });
@@ -82,7 +83,7 @@ export default class MainPresenter {
   }
 
   #renderMainComponents() {
-    if(!this.#destinationsModel.destinations || !this.#offersModel.offers) {
+    if(!this.#destinations || !this.#offers) {
       return;
     }
 
@@ -194,8 +195,8 @@ export default class MainPresenter {
     this.#addPointPresenter = new AddPointPresenter({
       pointsListContainer: this.#listComponent.element,
       point: this.#pointsModel.newPoint,
-      offers: this.#offers,
       destinations: this.#destinations,
+      offers: this.#offers,
       onDataChange: this.#handleViewAction,
       onAddPointClose: this.#handleAddPointClose,
     });

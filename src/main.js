@@ -32,13 +32,14 @@ const mainPresenter = new MainPresenter({
   filterModel,
 });
 const headerPresenter = new HeaderPresenter({
+  mainPresenter,
   headerContainer: headerElement,
   filtersContainer: filtersElement,
   pointsModel,
+  destinationsModel,
+  offersModel,
   filterModel,
 });
-
-headerPresenter.init();
 
 const loadingComponent = new LoadingView();
 render(loadingComponent, containerElement);
@@ -51,6 +52,7 @@ Promise.all([
   //console.log('Все данные загружены');
   remove(loadingComponent);
   mainPresenter.init();
+  headerPresenter.init();
 }).catch(() => {
   //console.error('Ошибка загрузки данных:', error);
 });
