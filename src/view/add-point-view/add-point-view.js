@@ -99,40 +99,31 @@ export default class AddPointView extends AbstractStatefulView {
     this.updateElement(AddPointView.parsePointToState(point));
   }
 
-  static parsePointToState(point) {
-    return {...point,
-      isDisabled: false,
-      isSaving: false,
-      isDeleting: false,
-    };
-  }
-
-  static parseStateToPoint(state) {
-    const point = {...state};
-
-    delete point.isDisabled;
-    delete point.isSaving;
-    delete point.isDeleting;
-
-    return point;
-  }
-
   #setDatespicker() {
+    const [dateStartElement, dateFinishElement] = this.element.querySelectorAll('.event__input--time');
+    const commonConfig = {
+      enableTime: true,
+      dateFormat: 'd/m/y H:i',
+      'time_24hr': true,
+      locale: {firstDayOfWeek: 1},
+    };
+
     this.#datepickerStart = flatpickr(
-      this.element.querySelector('#event-start-time'), {
-        enableTime: true,
-        dateFormat: 'd/m/y H:i',
+      dateStartElement,
+      {
+        ...commonConfig,
         defaultDate: this._state.dateFrom,
         onClose: this.#onDateStartChange,
       }
     );
+
     this.#datepickerFinish = flatpickr(
-      this.element.querySelector('#event-end-time'), {
-        enableTime: true,
-        dateFormat: 'd/m/y H:i',
+      dateFinishElement,
+      {
+        ...commonConfig,
         defaultDate: this._state.dateTo,
-        minDate: this._state.dateFrom,
         onClose: this.#onDateFinishChange,
+        minDate: this._state.dateFrom,
       }
     );
   }
@@ -162,6 +153,24 @@ export default class AddPointView extends AbstractStatefulView {
       this.#datepickerFinish.destroy();
       this.#datepickerFinish = null;
     }
+  }
+
+  static parsePointToState(point) {
+    return {...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    };
+  }
+
+  static parseStateToPoint(state) {
+    const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+
+    return point;
   }
 }
 

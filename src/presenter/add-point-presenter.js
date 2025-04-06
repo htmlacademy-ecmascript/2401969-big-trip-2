@@ -63,11 +63,6 @@ export default class AddPointPresenter {
   }
 
   #handleFormSubmit = (point) => {
-    if (!point.destination) {
-      this.destroy();
-      return;
-    }
-
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.POINTS_LIST,
@@ -85,11 +80,17 @@ export default class AddPointPresenter {
   }
 
   setAborting() {
+    if (!this.#addPointComponent) {
+      return;
+    }
+
     const resetFormState = () => {
+      if (!this.#addPointComponent) {
+        return;
+      }
       this.#addPointComponent.updateElement({
         isDisabled: false,
         isSaving: false,
-        isDeleting: false,
       });
     };
 

@@ -12,7 +12,7 @@ function getPrice(points, offers) {
 
 function getDestinationMarkup(destinations, points) {
   const names = points.map((point) => getDestination(point.destination, destinations)?.name);
-  return names.length <= 3 ? names.join(' - ') : `${names[0]} ... ${names[names.length - 1]}`;
+  return names.length <= 3 ? names.join(' — ') : `${names[0]} — ... —  ${names[names.length - 1]}`;
 }
 
 function createInfoTemplate(points, destinations, offers) {

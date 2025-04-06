@@ -1,14 +1,9 @@
-//import { createPoint } from '../mock/mockPoint';
 import Observable from '../framework/observable.js';
 import dayjs from 'dayjs';
-import { UpdateType } from '../const.js';
-
-//const POINS_QTY = 5;
 
 export default class PointsModel extends Observable {
   #pointsApiService = null;
   #points = [];
-  //#points = Array.from({ length: POINS_QTY }, createPoint);
 
   constructor({pointsApiService}) {
     super();
@@ -17,17 +12,6 @@ export default class PointsModel extends Observable {
 
   get points() {
     return this.#points;
-  }
-
-  async init() {
-    try {
-      const points = await this.#pointsApiService.points;
-      this.#points = points.map(this.#adaptToClient);
-    } catch(err) {
-      this.#points = [];
-    }
-
-    this._notify(UpdateType.INIT);
   }
 
   get newPoint() {
@@ -40,6 +24,15 @@ export default class PointsModel extends Observable {
       offers: [],
       type: 'flight',
     };
+  }
+
+  async init() {
+    try {
+      const points = await this.#pointsApiService.points;
+      this.#points = points.map(this.#adaptToClient);
+    } catch(err) {
+      this.#points = ['error'];
+    }
   }
 
   async updatePoint(updateType, update) {
