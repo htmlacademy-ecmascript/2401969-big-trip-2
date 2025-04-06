@@ -2,75 +2,86 @@ import dayjs from 'dayjs';
 import { capitalize } from '../../utils';
 import he from 'he';
 
-const createNameTemplate = ({ name }) => `<option value="${name}"></option>`;
-
-const createDestinationPhotoTemplate = (pictures) =>
-  pictures
-    .map(
-      (picture) =>
-        `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`
-    )
-    .join('');
-
 function createTypeTemplate({ type }, id) {
   const typeText = capitalize(type);
   return `<div class="event__type-item">
-                          <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-                          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${typeText}</label>
-                        </div>
-                        `;
+            <input id="event-type-${type}-${id}"
+            class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+            <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${typeText}</label>
+            </div>
+          `;
 }
+
+const createNameTemplate = ({ name }) => `<option value="${name}"></option>`;
 
 function createOffersTemplate(typeOffers, pointOffers, point) {
   if (typeOffers.length !== 0) {
     return `<section class="event__section  event__section--offers">
-  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-  <div class="event__available-offers">
-                    ${typeOffers
+           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+           <div class="event__available-offers">
+            ${typeOffers
     .map(({ id, title, price }) => {
       const isChecked = pointOffers.includes(id)
         ? 'checked'
         : '';
       return `<div class="event__offer-selector">
-                                          <input class="event__offer-checkbox  visually-hidden"
-                                          id="${id}"
-                                          data-offer-id="${id}"
-                                          type="checkbox" name="event-offer-${id}"
-                                          ${isChecked}
-                                          ${point.isDisabled ? 'disabled' : ''}>
-                                          <label class="event__offer-label" for="${id}">
-                                            <span class="event__offer-title">${title}</span>
-                                            &plus;&euro;&nbsp;
-                                            <span class="event__offer-price">${price}</span>
-                                          </label>
-                                        </div>`;
-    })
-    .join('')}
-                    </div>
-                  </section>`;
+                <input class="event__offer-checkbox  visually-hidden"
+                id="${id}"
+                data-offer-id="${id}"
+                type="checkbox" name="event-offer-${id}"
+                ${isChecked}
+                ${point.isDisabled ? 'disabled' : ''}>
+                <label class="event__offer-label" for="${id}">
+                <span class="event__offer-title">${title}</span>
+                &plus;&euro;&nbsp;
+                <span class="event__offer-price">${price}</span>
+                </label>
+              </div>`;
+    }).join('')}
+            </div>
+          </section>`;
   }
   return '';
 }
 
+function createDestinationPhotoTemplate(pictures) {
+  if (pictures.length !== 0) {
+    return `<div class="event__photos-container">
+              <div class="event__photos-tape">
+               ${pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`)
+    .join('')}
+      </div>
+    </div>`;
+  }
+  return '';
+}
+
+function createDestinationTemplate({description, pictures}) {
+  if (!description && pictures.length === 0) {
+    return '';
+  }
+  return `<section class="event__section  event__section--destination">
+                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                    ${description ? `<p class="event__destination-description">${description}</p>` : ''}
+                    ${createDestinationPhotoTemplate(pictures)}
+                  </section>`;
+}
+
 function createEditPointTemplate(point, destinations, offers) {
   const { id, type, basePrice, dateFrom, dateTo, isDisabled, isSaving, isDeleting } = point;
-  const editPointDestination = destinations.find(
-    (destination) => destination.id === point.destination
-  );
-  const { name, description, pictures } = editPointDestination;
-  const namesTemplate = destinations.map((destination) =>
-    createNameTemplate(destination)
-  );
-  const photoTemplate = createDestinationPhotoTemplate(pictures);
+  const editPointDestination = destinations.find((destination) => destination.id === point.destination) || '';
+  const { name, } = editPointDestination;
   const pointOffersByType = offers.find((offer) => offer.type === point.type);
-  const typesTemplate = offers
-    .map((offer) => createTypeTemplate(offer, id))
-    .join('');
+
+  const typesTemplate = offers.map((offer) => createTypeTemplate(offer, id)).join('');
+  const namesTemplate = destinations.map((destination) => createNameTemplate(destination)).join('');
   const offersTemplate = createOffersTemplate(
     pointOffersByType.offers,
     point.offers,
     point,
   );
+  const destinationTemplate = createDestinationTemplate(editPointDestination);
+
   const dateStart = dayjs(dateFrom).format('DD/MM/YY HH:mm');
   const dateFinish = dayjs(dateTo).format('DD/MM/YY HH:mm');
 
@@ -80,7 +91,7 @@ function createEditPointTemplate(point, destinations, offers) {
                 <div class="event__type-wrapper">
                   <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
                     <span class="visually-hidden">Choose event type</span>
-                    <img class="event__type-icon" width="${id}7" height="${id}7" src="img/icons/${type}.png" alt="Event type icon">
+                    <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
                   </label>
                   <input class="event__type-toggle  visually-hidden"
                   id="event-type-toggle-${id}" type="checkbox"
@@ -142,16 +153,7 @@ function createEditPointTemplate(point, destinations, offers) {
               </header>
               <section class="event__details">
                 ${offersTemplate}
-
-                <section class="event__section  event__section--destination">
-                  <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                  <p class="event__destination-description">${description}</p>
-                  <div class="event__photos-container">
-                    <div class="event__photos-tape">
-                      ${photoTemplate}
-                      </div>
-                    </div>
-                </section>
+                ${destinationTemplate}
               </section>
             </form>
           </li>`;

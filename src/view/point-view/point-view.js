@@ -21,6 +21,10 @@ export default class PointView extends AbstractView {
     this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#onFavoriteClick);
   }
 
+  get template() {
+    return createPointTemplate(this.#point, this.#destinations, this.#offers);
+  }
+
   #onEditClick = (evt) => {
     evt.preventDefault();
     this.#handleEditClick();
@@ -30,8 +34,4 @@ export default class PointView extends AbstractView {
     evt.preventDefault();
     this.#handleFavoriteClick();
   };
-
-  get template() {
-    return createPointTemplate(this.#point, this.#destinations, this.#offers);
-  }
 }

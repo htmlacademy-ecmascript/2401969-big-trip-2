@@ -2,6 +2,7 @@ import AbstractStatefulView from '../../framework/view/abstract-stateful-view.js
 import { createEditPointTemplate } from './edit-point-view-template.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { convertToISO } from '../../utils.js';
 
 export default class EditPointView extends AbstractStatefulView {
   #destinations = null;
@@ -109,6 +110,61 @@ export default class EditPointView extends AbstractStatefulView {
     this.updateElement(EditPointView.parsePointToState(point));
   }
 
+  #setDatespicker() {
+    const [dateStartElement, dateFinishElement] = this.element.querySelectorAll('.event__input--time');
+    const commonConfig = {
+      enableTime: true,
+      dateFormat: 'd/m/y H:i',
+      'time_24hr': true,
+      locale: {firstDayOfWeek: 1},
+    };
+
+    this.#datepickerStart = flatpickr(
+      dateStartElement,
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateFrom,
+        onClose: this.#onDateStartChange,
+      }
+    );
+
+    this.#datepickerFinish = flatpickr(
+      dateFinishElement,
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateTo,
+        onClose: this.#onDateFinishChange,
+        minDate: this._state.dateFrom,
+      }
+    );
+  }
+
+  #onDateStartChange = ([userDate]) => {
+    const isoDate = convertToISO(userDate);
+    this._setState({ dateFrom: isoDate });
+    this.#datepickerFinish.set('minDate', isoDate);
+  };
+
+  #onDateFinishChange = ([userDate]) => {
+    const isoDate = convertToISO(userDate);
+    this._setState({ dateTo: isoDate });
+    this.#datepickerStart.set('maxDate', isoDate);
+  };
+
+  removeElement() {
+    super.removeElement();
+
+    if(this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+
+    if(this.#datepickerFinish) {
+      this.#datepickerFinish.destroy();
+      this.#datepickerFinish = null;
+    }
+  }
+
   static parsePointToState(point) {
     return {...point,
       isDisabled: false,
@@ -125,53 +181,6 @@ export default class EditPointView extends AbstractStatefulView {
     delete point.isDeleting;
 
     return point;
-  }
-
-  #setDatespicker() {
-    this.#datepickerStart = flatpickr(
-      this.element.querySelector('#event-start-time'), {
-        enableTime: true,
-        dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dateFrom,
-        onClose: this.#onDateStartChange,
-      }
-    );
-    this.#datepickerFinish = flatpickr(
-      this.element.querySelector('#event-end-time'), {
-        enableTime: true,
-        dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dateTo,
-        minDate: this._state.dateFrom,
-        onClose: this.#onDateFinishChange,
-      }
-    );
-  }
-
-  #onDateStartChange = ([userDate]) => {
-    this.updateElement({
-      dateFrom: userDate,
-    });
-    this.#datepickerFinish.set('minDate', userDate);
-  };
-
-  #onDateFinishChange = ([userDate]) => {
-    this.updateElement({
-      dateTo: userDate,
-    });
-  };
-
-  removeElement() {
-    super.removeElement();
-
-    if(this.#datepickerStart) {
-      this.#datepickerStart.destroy();
-      this.#datepickerStart = null;
-    }
-
-    if(this.#datepickerFinish) {
-      this.#datepickerFinish.destroy();
-      this.#datepickerFinish = null;
-    }
   }
 }
 

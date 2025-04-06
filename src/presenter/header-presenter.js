@@ -2,8 +2,8 @@ import FiltersPresenter from './filters-presenter';
 import InfoView from '../view/info-view/info-view';
 import { render, remove, RenderPosition } from '../framework/render';
 
-
 export default class HeaderPresenter {
+  #mainPresenter = null;
   #headerContainer = null;
   #filtersContainer = null;
   #pointsModel = null;
@@ -11,12 +11,14 @@ export default class HeaderPresenter {
   #offersModel = null;
   #filterModel = null;
 
+  #points = [];
   #offers = [];
   #destinations = [];
 
   #infoViewComponent = null;
 
-  constructor({ headerContainer, filtersContainer, pointsModel, destinationsModel, offersModel, filterModel, }) {
+  constructor({ mainPresenter, headerContainer, filtersContainer, pointsModel, destinationsModel, offersModel, filterModel, }) {
+    this.#mainPresenter = mainPresenter;
     this.#headerContainer = headerContainer;
     this.#filtersContainer = filtersContainer;
     this.#pointsModel = pointsModel;
@@ -35,11 +37,14 @@ export default class HeaderPresenter {
     this.#destinations = this.#destinationsModel.destinations;
     this.#offers = this.#offersModel.offers;
 
-    this.#renderInfoView();
     this.#renderFiltersView();
+    this.#renderInfoView();
   }
 
   #renderInfoView() {
+    if (!this.points) {
+      return;
+    }
     if (this.#infoViewComponent) {
       remove(this.#infoViewComponent);
     }

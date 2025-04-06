@@ -5,10 +5,10 @@ import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 import { FilterType } from './const';
 
-//const DATE_FORMAT = 'MMM D';
-
 const humanizeDate = (date) =>
   date ? dayjs(date).format('MMM D') : '';
+
+const convertToISO = (date) => dayjs(date).toISOString();
 
 const getCurrentDate = (date) => dayjs(date).format('DD MMM');
 
@@ -30,14 +30,6 @@ function getDuration(dateFrom, dateTo) {
 }
 
 const capitalize = (string) => string[0].toUpperCase() + string.slice(1);
-
-const getRandomInteger = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
-
-const getRandomArrayElement = (elements) =>
-  elements[Math.floor(Math.random() * elements.length)];
-
-const getRandomBoolean = () => Math.random() < 0.5;
 
 const isEscKey = (evt) => evt.key === 'Escape';
 
@@ -122,11 +114,9 @@ const getDestination = (id, destinations) => destinations.find((destination) => 
 export {
   isEscKey,
   capitalize,
-  getRandomInteger,
-  getRandomArrayElement,
-  getRandomBoolean,
   getCurrentDate,
   humanizeDate,
+  convertToISO,
   getDuration,
   isDatesEqual,
   calculatesTravelTime,

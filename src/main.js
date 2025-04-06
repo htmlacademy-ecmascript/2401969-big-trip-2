@@ -1,4 +1,4 @@
-//import FilterView from './view/filter-view/filter-view';
+
 import { render, remove } from './framework/render';
 import HeaderPresenter from './presenter/header-presenter';
 import MainPresenter from './presenter/main-presenter';
@@ -6,7 +6,7 @@ import PointsModel from './model/points-model';
 import DestinationsModel from './model/destinations-model';
 import OffersModel from './model/offers-model';
 import FilterModel from './model/filters-model';
-import PointsApiService from './points-api-service';
+import PointsApiService from './api/points-api-service';
 import LoadingView from './view/loading-view/loading-view';
 
 const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip';
@@ -55,6 +55,7 @@ Promise.all([
   headerPresenter.init();
 }).catch(() => {
   //console.error('Ошибка загрузки данных:', error);
+  remove(loadingComponent);
 });
 
 

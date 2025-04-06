@@ -2,100 +2,98 @@ import dayjs from 'dayjs';
 import { capitalize } from '../../utils';
 import he from 'he';
 
-const createNameTemplate = ({ name }) => `<option value="${name}"></option>`;
-
-function createDestinationPhotoTemplate(pictures) {
-  return pictures
-    .map((picture) =>
-      `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`
-    )
-    .join('');
-}
-
-
 function createTypeTemplate({ type }, id) {
   const typeText = capitalize(type);
   return `<div class="event__type-item">
-                          <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-                          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${typeText}</label>
-                        </div>
-                        `;
+            <input id="event-type-${type}-${id}"
+            class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+            <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${typeText}</label>
+            </div>
+          `;
 }
 
-function createDestinationTemplate(destination) {
-  if (destination) {
-    return `<section class="event__section  event__section--destination">
-                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${destination.description}</p>
-                    <div class="event__photos-container">
-                      <div class="event__photos-tape">
-                        ${createDestinationPhotoTemplate(destination.pictures)}
-                      </div>
-                    </div>
-                  </section>`;
-  }
-  return '';
-}
+const createNameTemplate = ({name}) => `<option value="${name}"></option>`;
 
 function createOffersTemplate(typeOffers, pointOffers, point) {
   if (typeOffers.length !== 0) {
     return `<section class="event__section  event__section--offers">
-  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-  <div class="event__available-offers">
-                    ${typeOffers
+           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+           <div class="event__available-offers">
+            ${typeOffers
     .map(({ id, title, price }) => {
-      const checked = pointOffers.includes(id)
+      const isChecked = pointOffers.includes(id)
         ? 'checked'
         : '';
       return `<div class="event__offer-selector">
-                                          <input class="event__offer-checkbox  visually-hidden"
-                                          id="${id}"
-                                          data-offer-id="${id}"
-                                          type="checkbox" name="event-offer-${id}"
-                                          ${checked}
-                                          ${point.isDisabled ? 'disabled' : ''}>
-                                          <label class="event__offer-label" for="${id}">
-                                            <span class="event__offer-title">${title}</span>
-                                            &plus;&euro;&nbsp;
-                                            <span class="event__offer-price">${price}</span>
-                                          </label>
-                                        </div>`;
-    })
-    .join('')}
-                    </div>
-                  </section>`;
+                <input class="event__offer-checkbox  visually-hidden"
+                id="${id}"
+                data-offer-id="${id}"
+                type="checkbox" name="event-offer-${id}"
+                ${isChecked}
+                ${point.isDisabled ? 'disabled' : ''}>
+                <label class="event__offer-label" for="${id}">
+                <span class="event__offer-title">${title}</span>
+                &plus;&euro;&nbsp;
+                <span class="event__offer-price">${price}</span>
+                </label>
+              </div>`;
+    }).join('')}
+            </div>
+          </section>`;
   }
   return '';
+}
+
+function createDestinationPhotoTemplate(pictures) {
+  if (pictures.length !== 0) {
+    return `<div class="event__photos-container">
+              <div class="event__photos-tape">
+               ${pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`)
+    .join('')}
+      </div>
+    </div>`;
+  }
+  return '';
+}
+
+function createDestinationTemplate({description, pictures}) {
+  if (!description && (!pictures || !pictures.length)) {
+    return '';
+  }
+  return `<section class="event__section  event__section--destination">
+                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                    ${description ? `<p class="event__destination-description">${description}</p>` : ''}
+                    ${createDestinationPhotoTemplate(pictures)}
+                  </section>`;
 }
 
 function createAddPointTemplate(point, destinations, offers) {
   const { id, type, basePrice, dateFrom, dateTo, isDisabled, isSaving, } = point;
   const editPointDestination = destinations.find((destination) => destination.id === point.destination) || '';
-  const namesTemplate = destinations.map((destination) =>
-    createNameTemplate(destination)
-  );
   const pointOffersByType = offers.find((offer) => offer.type === point.type);
-  const typesTemplate = offers
-    .map((offer) => createTypeTemplate(offer, id))
-    .join('');
+
+  const typesTemplate = offers.map((offer) => createTypeTemplate(offer, id)).join('');
+  const namesTemplate = destinations.map((destination) => createNameTemplate(destination)).join('');
   const offersTemplate = createOffersTemplate(
     pointOffersByType.offers,
     point.offers,
-    point
+    point,
   );
   const destinationTemplate = createDestinationTemplate(editPointDestination);
+
   const dateStart = dayjs(dateFrom).format('DD/MM/YY HH:mm');
   const dateFinish = dayjs(dateTo).format('DD/MM/YY HH:mm');
 
-  return `<form class="event event--edit" action="#" method="post">
+  return `<li class="trip-events__item">
+            <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
-                    <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
+                    <label class="event__type  event__type-btn" for="event-type-toggle">
                       <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="${id}7" height="${id}7" src="img/icons/${type}.png" alt="Event type icon">
+                      <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden"
-                    id="event-type-toggle-${id}" type="checkbox"
+                    id="event-type-toggle" type="checkbox"
                     ${isDisabled ? 'disabled' : ''}>
 
                     <div class="event__type-list">
@@ -109,15 +107,15 @@ function createAddPointTemplate(point, destinations, offers) {
                   </div>
 
                   <div class="event__field-group  event__field-group--destination">
-                    <label class="event__label  event__type-output" for="event-destination-${id}">
+                    <label class="event__label  event__type-output" for="event-destination">
                       ${type}
                     </label>
                     <input class="event__input  event__input--destination"
-                    id="event-destination-${id}" type="text" name="event-destination" value="${editPointDestination?.name || ''}"
-                    list="destination-list-${id}"
+                    id="event-destination" type="text" name="event-destination" value="${editPointDestination?.name || ''}"
+                    list="destination-list"
                     ${isDisabled ? 'disabled' : ''}
                     required>
-                    <datalist id="destination-list-${id}">
+                    <datalist id="destination-list">
                       ${namesTemplate}
                     </datalist>
                   </div>
@@ -135,12 +133,12 @@ function createAddPointTemplate(point, destinations, offers) {
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
-                    <label class="event__label" for="event-price-${id}">
+                    <label class="event__label" for="event-price">
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
                     <input class="event__input  event__input--price"
-                    id="event-price-${id}" type="number" name="event-price"
+                    id="event-price" type="number" name="event-price"
                     value="${he.encode(String(basePrice))}"
                     ${isDisabled ? 'disabled' : ''}>
                   </div>
@@ -151,10 +149,10 @@ function createAddPointTemplate(point, destinations, offers) {
                 </header>
                 <section class="event__details">
                   ${offersTemplate}
-
                   ${destinationTemplate}
                 </section>
-              </form>`;
+              </form>
+          </li>`;
 }
 
 export { createAddPointTemplate };

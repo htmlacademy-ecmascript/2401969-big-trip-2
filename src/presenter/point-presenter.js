@@ -2,12 +2,7 @@ import { remove, render, replace } from '../framework/render';
 import { isEscKey, isDatesEqual } from '../utils';
 import PointView from '../view/point-view/point-view';
 import EditPointView from '../view/edit-point-view/edit-point-view';
-import { UpdateType, UserAction } from '../const';
-
-const Mode = {
-  VIEW: 'VIEW',
-  EDIT: 'EDIT',
-};
+import { UpdateType, UserAction, Mode} from '../const';
 
 export default class PointPresenter {
   #pointsListContainer = null;
@@ -112,7 +107,14 @@ export default class PointPresenter {
       return;
     }
 
+    if (!this.#editPointComponent) {
+      return;
+    }
+
     const resetFormState = () => {
+      if (!this.#editPointComponent) {
+        return;
+      }
       this.#editPointComponent.updateElement({
         isDisabled: false,
         isSaving: false,
@@ -127,7 +129,7 @@ export default class PointPresenter {
     if (isEscKey(evt)) {
       evt.preventDefault();
       this.#editPointComponent.reset(this.#point);
-      this.#replaceToView();
+      this.#handleEditClose();
       document.removeEventListener('keydown', this.#onDocumentEscKeydown);
     }
   };
@@ -166,7 +168,6 @@ export default class PointPresenter {
       UserAction.UPDATE_POINT,
       isMinorUpdate ? UpdateType.POINTS_LIST : UpdateType.POINT,
       update,);
-    //this.#replaceToView();
   };
 
   #handleEditClose = () => {
