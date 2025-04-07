@@ -11,7 +11,6 @@ export default class HeaderPresenter {
   #offersModel = null;
   #filterModel = null;
 
-  #points = [];
   #offers = [];
   #destinations = [];
 

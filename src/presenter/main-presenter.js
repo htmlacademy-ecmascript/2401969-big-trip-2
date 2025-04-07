@@ -1,7 +1,7 @@
 import AddPointButtonView from '../view/add-point-button-view/add-point-button-view';
 import ListView from '../view/list-view/list-view';
 import SortView from '../view/sort-view/sort-view';
-import NoPointView from '../view/no-points-view/no-points-view';
+import NoPointsView from '../view/no-points-view/no-points-view';
 import ErrorView from '../view/error-view/error-view';
 import AddPointPresenter from './add-point-presenter';
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
@@ -21,9 +21,10 @@ export default class MainPresenter {
   #offers = [];
   #destinations = [];
 
+  #addPointButtonComponent = null;
   #listComponent = new ListView();
   #errorViewComponent = null;
-  #noPointComponent = null;
+  #noPointsComponent = null;
   #sortViewComponent = null;
 
   #pointPresenters = new Map();
@@ -74,10 +75,10 @@ export default class MainPresenter {
   }
 
   #renderAddPointButton() {
-    this.addPointButtonComponent = new AddPointButtonView({
+    this.#addPointButtonComponent = new AddPointButtonView({
       onClick: this.#handleAddPointButtonClick
     });
-    render(this.addPointButtonComponent, this.#headerContainer);
+    render(this.#addPointButtonComponent, this.#headerContainer);
   }
 
   #renderMainComponents() {
@@ -98,8 +99,8 @@ export default class MainPresenter {
     render(this.#listComponent, this.#mainContainer);
 
     if (this.points.includes('error')
-      || !this.#destinationsModel.destinations.length
-      || !this.#offersModel.offers.length) {
+      || !this.#destinations.length
+      || !this.#offers.length) {
       this.#renderErrorView();
 
       return;
@@ -122,10 +123,10 @@ export default class MainPresenter {
   }
 
   #renderNoPoints() {
-    this.#noPointComponent = new NoPointView({
+    this.#noPointsComponent = new NoPointsView({
       filterType: this.#filterType
     });
-    render(this.#noPointComponent, this.#mainContainer);
+    render(this.#noPointsComponent, this.#mainContainer);
     remove(this.#sortViewComponent);
   }
 
@@ -142,6 +143,13 @@ export default class MainPresenter {
   }
 
   renderAddPoint() {
+    if (this.points.includes('error')
+      || !this.#destinations.length
+      || !this.#offers.length) {
+
+      return;
+    }
+
     this.#currentSortType = SortType.DAY.name;
     this.#filterModel.setFilter(UpdateType.MAIN_COMPONENT, FilterType.EVERYTHING);
     this.#addPointPresenter = new AddPointPresenter({
@@ -152,14 +160,20 @@ export default class MainPresenter {
       onDataChange: this.#handleViewAction,
       onAddPointClose: this.#handleAddPointClose,
     });
-    if (this.#noPointComponent) {
-      remove(this.#noPointComponent);
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
     }
     this.#addPointPresenter.init();
   }
 
   #handleModeChange = () => {
+    if (this.#addPointButtonComponent) {
+      this.#handleAddPointClose();
+    }
+
+    this.#addPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
+
   };
 
   #handleViewAction = async (actionType, updateType, update) => {
@@ -213,7 +227,7 @@ export default class MainPresenter {
 
   #handleAddPointButtonClick = () => {
     this.renderAddPoint();
-    this.addPointButtonComponent.element.disabled = true;
+    this.#addPointButtonComponent.element.disabled = true;
   };
 
   #handleSortTypeChange = (sortType) => {
@@ -228,8 +242,7 @@ export default class MainPresenter {
   };
 
   #handleAddPointClose = () => {
-    this.#renderPointsList();
-    this.addPointButtonComponent.element.disabled = false;
+    this.#addPointButtonComponent.element.disabled = false;
   };
 
   #clearBoard({resetSortType = false} = {}) {
@@ -239,12 +252,16 @@ export default class MainPresenter {
     remove(this.#sortViewComponent);
     remove(this.#listComponent);
 
-    if (this.#noPointComponent) {
-      remove(this.#noPointComponent);
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
     }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY.name;
     }
+
+    this.#handleAddPointClose();
   }
 }
+
+

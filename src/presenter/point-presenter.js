@@ -128,7 +128,6 @@ export default class PointPresenter {
   #onDocumentEscKeydown = (evt) => {
     if (isEscKey(evt)) {
       evt.preventDefault();
-      this.#editPointComponent.reset(this.#point);
       this.#handleEditClose();
       document.removeEventListener('keydown', this.#onDocumentEscKeydown);
     }

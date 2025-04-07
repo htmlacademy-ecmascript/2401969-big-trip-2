@@ -95,10 +95,6 @@ export default class AddPointView extends AbstractStatefulView {
     });
   };
 
-  reset(point) {
-    this.updateElement(AddPointView.parsePointToState(point));
-  }
-
   #setDatespicker() {
     const [dateStartElement, dateFinishElement] = this.element.querySelectorAll('.event__input--time');
     const commonConfig = {
@@ -160,6 +156,9 @@ export default class AddPointView extends AbstractStatefulView {
       isDisabled: false,
       isSaving: false,
       isDeleting: false,
+      dateFrom: '',
+      dateTo: '',
+      offers: point.offers ?? []
     };
   }
 

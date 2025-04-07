@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration';
-dayjs.extend(durationPlugin);
 import isBetween from 'dayjs/plugin/isBetween';
-dayjs.extend(isBetween);
 import { FilterType } from './const';
+
+dayjs.extend(durationPlugin);
+dayjs.extend(isBetween);
 
 const humanizeDate = (date) =>
   date ? dayjs(date).format('MMM D') : '';
@@ -29,7 +30,7 @@ function getDuration(dateFrom, dateTo) {
   return `${formattedDays} ${formattedHours} ${formattedMinutes}`.trim();
 }
 
-const capitalize = (string) => string[0].toUpperCase() + string.slice(1);
+const capitalize = (data) => data[0].toUpperCase() + data.slice(1);
 
 const isEscKey = (evt) => evt.key === 'Escape';
 

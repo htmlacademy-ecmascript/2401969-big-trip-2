@@ -55,8 +55,6 @@ export default class AddPointPresenter {
       return;
     }
 
-    this.#handleAddPointClose();
-
     remove(this.#addPointComponent);
     this.#addPointComponent = null;
     document.removeEventListener('keydown', this.#onDocumentEscKeydown);
@@ -68,8 +66,6 @@ export default class AddPointPresenter {
       UpdateType.POINTS_LIST,
       point,
     );
-
-    this.#handleAddPointClose();
   };
 
   setSaving() {
@@ -99,12 +95,14 @@ export default class AddPointPresenter {
 
   #handleCancelClick = () => {
     this.destroy();
+    this.#handleAddPointClose();
   };
 
   #onDocumentEscKeydown = (evt) => {
     if (isEscKey(evt)) {
       evt.preventDefault();
       this.destroy();
+      this.#handleAddPointClose();
     }
   };
 }
