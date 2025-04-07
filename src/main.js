@@ -5,7 +5,7 @@ import MainPresenter from './presenter/main-presenter';
 import PointsModel from './model/points-model';
 import DestinationsModel from './model/destinations-model';
 import OffersModel from './model/offers-model';
-import FilterModel from './model/filters-model';
+import FilterModel from './model/filter-model';
 import PointsApiService from './api/points-api-service';
 import LoadingView from './view/loading-view/loading-view';
 
@@ -49,12 +49,10 @@ Promise.all([
   destinationsModel.init(),
   pointsModel.init()
 ]).then(() => {
-  //console.log('Все данные загружены');
   remove(loadingComponent);
   mainPresenter.init();
   headerPresenter.init();
 }).catch(() => {
-  //console.error('Ошибка загрузки данных:', error);
   remove(loadingComponent);
 });
 

@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { capitalize } from '../../utils';
 import he from 'he';
 
@@ -15,7 +14,7 @@ function createTypeTemplate({ type }, id) {
 const createNameTemplate = ({name}) => `<option value="${name}"></option>`;
 
 function createOffersTemplate(typeOffers, pointOffers, point) {
-  if (typeOffers.length !== 0) {
+  if (typeOffers.length) {
     return `<section class="event__section  event__section--offers">
            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
            <div class="event__available-offers">
@@ -68,9 +67,9 @@ function createDestinationTemplate({description, pictures}) {
 }
 
 function createAddPointTemplate(point, destinations, offers) {
-  const { id, type, basePrice, dateFrom, dateTo, isDisabled, isSaving, } = point;
+  const { id, type, basePrice, isDisabled, isSaving, } = point;
   const editPointDestination = destinations.find((destination) => destination.id === point.destination) || '';
-  const pointOffersByType = offers.find((offer) => offer.type === point.type);
+  const pointOffersByType = offers.find((offer) => offer.type === point.type) || [];
 
   const typesTemplate = offers.map((offer) => createTypeTemplate(offer, id)).join('');
   const namesTemplate = destinations.map((destination) => createNameTemplate(destination)).join('');
@@ -80,9 +79,6 @@ function createAddPointTemplate(point, destinations, offers) {
     point,
   );
   const destinationTemplate = createDestinationTemplate(editPointDestination);
-
-  const dateStart = dayjs(dateFrom).format('DD/MM/YY HH:mm');
-  const dateFinish = dayjs(dateTo).format('DD/MM/YY HH:mm');
 
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -123,12 +119,12 @@ function createAddPointTemplate(point, destinations, offers) {
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time">From</label>
                     <input class="event__input  event__input--time"
-                    id="event-start-time" type="text" name="event-start-time" value="${dateStart}"
+                    id="event-start-time" type="text" name="event-start-time" value=""
                     ${isDisabled ? 'disabled' : ''}>
                     &mdash;
                     <label class="visually-hidden" for="event-end-time">To</label>
                     <input class="event__input  event__input--time"
-                    id="event-end-time" type="text" name="event-end-time" value="${dateFinish}"
+                    id="event-end-time" type="text" name="event-end-time" value=""
                     ${isDisabled ? 'disabled' : ''}>
                   </div>
 
