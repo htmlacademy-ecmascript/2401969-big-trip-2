@@ -1,7 +1,7 @@
 import AbstractView from '../../framework/view/abstract-view.js';
 import { createNoPointViewTemplate } from './no-points-view-template.js';
 
-export default class NoPoinstView extends AbstractView {
+export default class NoPointsView extends AbstractView {
   #filterType = null;
 
   constructor({ filterType }) {
