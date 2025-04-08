@@ -142,7 +142,7 @@ export default class MainPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  renderAddPoint() {
+  #renderAddPoint() {
     if (this.points.includes('error')
       || !this.#destinations.length
       || !this.#offers.length) {
@@ -158,7 +158,7 @@ export default class MainPresenter {
       destinations: this.#destinations,
       offers: this.#offers,
       onDataChange: this.#handleViewAction,
-      onAddPointClose: this.#handleAddPointClose,
+      onAddPointClose: this.#restoreAddPointButton,
     });
     if (this.#noPointsComponent) {
       remove(this.#noPointsComponent);
@@ -168,10 +168,11 @@ export default class MainPresenter {
 
   #handleModeChange = () => {
     if (this.#addPointButtonComponent) {
-      this.#handleAddPointClose();
+      this.#restoreAddPointButton();
     }
 
-    this.#addPointPresenter.destroy();
+    //this.#renderAddPoint();
+    //this.#addPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
 
   };
@@ -226,7 +227,7 @@ export default class MainPresenter {
   };
 
   #handleAddPointButtonClick = () => {
-    this.renderAddPoint();
+    this.#renderAddPoint();
     this.#addPointButtonComponent.element.disabled = true;
   };
 
@@ -241,13 +242,17 @@ export default class MainPresenter {
     this.#renderPointsList();
   };
 
-  #handleAddPointClose = () => {
+  #restoreAddPointButton = () => {
     this.#addPointButtonComponent.element.disabled = false;
   };
 
   #clearBoard({resetSortType = false} = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+
+    if (this.#addPointButtonComponent) {
+      this.#restoreAddPointButton();
+    }
 
     remove(this.#sortViewComponent);
     remove(this.#listComponent);
@@ -259,8 +264,6 @@ export default class MainPresenter {
     if (resetSortType) {
       this.#currentSortType = SortType.DAY.name;
     }
-
-    this.#handleAddPointClose();
   }
 }
 

@@ -7,7 +7,7 @@ import { isEscKey, } from '../utils';
 export default class AddPointPresenter {
   #pointsListContainer = null;
   #handleDataChange = null;
-  #handleAddPointClose = null;
+  #restoreAddPointButton = null;
 
   #point = null;
   #destinations = [];
@@ -21,7 +21,7 @@ export default class AddPointPresenter {
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleDataChange = onDataChange;
-    this.#handleAddPointClose = onAddPointClose;
+    this.#restoreAddPointButton = onAddPointClose;
   }
 
   init() {
@@ -54,6 +54,8 @@ export default class AddPointPresenter {
     if (this.#addPointComponent === null) {
       return;
     }
+
+    this.#restoreAddPointButton();
 
     remove(this.#addPointComponent);
     this.#addPointComponent = null;
@@ -95,14 +97,12 @@ export default class AddPointPresenter {
 
   #handleCancelClick = () => {
     this.destroy();
-    this.#handleAddPointClose();
   };
 
   #onDocumentEscKeydown = (evt) => {
     if (isEscKey(evt)) {
       evt.preventDefault();
       this.destroy();
-      this.#handleAddPointClose();
     }
   };
 }
